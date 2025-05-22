@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社員情報ダッシュボード</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 2400px; /* Adjusted for more columns */
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            overflow-x: auto; 
+        }
+        header h1 {
+            font-size: 20px; 
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        header p {
+            font-size: 12px; 
+            color: #555;
+            margin-bottom: 15px;
+        }
+        header p a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        header p a:hover {
+            text-decoration: underline;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .filter-actions select,
+        .filter-actions button {
+            padding: 6px 8px; 
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px; 
+            background-color: #fff;
+        }
+        .filter-actions button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-color: #007bff;
+        }
+        .filter-actions button:hover {
+            background-color: #0056b3;
+        }
+        .filter-actions .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .filter-actions .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .filter-actions .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .filter-actions .btn-success:hover {
+            background-color: #1e7e34;
+        }
+        .filter-actions .changed-info {
+            font-size: 12px;
+            margin-left: auto; 
+            margin-right: 10px;
+        }
+
+        .dashboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .dashboard-table th,
+        .dashboard-table td {
+            border: 1px solid #ddd;
+            padding: 6px; 
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap; 
+        }
+        .dashboard-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            position: sticky; 
+            top: 0;           
+            z-index: 10;       
+        }
+
+        .dashboard-table td[contenteditable="true"] {
+            background-color: #f0f8ff; 
+            cursor: text;
+        }
+        .dashboard-table td.highlight-changed,
+        .dashboard-table td select.highlight-changed { 
+            background-color: #fffacd !important; 
+            font-weight: bold;
+        }
+        .dashboard-table td select.highlight-purple {
+            background-color: #e6e0f8 !important; /* Light purple */
+        }
+
+        .dashboard-table th input[type="checkbox"],
+        .dashboard-table td input[type="checkbox"],
+        .dashboard-table td select {
+            vertical-align: middle;
+            margin: 0;
+            font-size: 12px;
+        }
+         .dashboard-table td select {
+            padding: 3px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            min-width: 80px; 
+         }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 7px;
+            border-radius: 10px; 
+            color: #fff;
+            font-size: 10px;
+            font-weight: 500;
+            text-align: center;
+            min-width: 70px;
+        }
+        .status-mitouchaku { background-color: #95a5a6; } 
+        .status-kakunin-chuu { background-color: #1abc9c; } 
+        .status-shuusei-irai { background-color: #e74c3c; } 
+        .status-kanryo { background-color: #2ecc71; }    
+
+        /* Column width and alignment adjustments */
+        .dashboard-table th:nth-child(1), .dashboard-table td:nth-child(1) { min-width: 25px; text-align: center; } 
+        .dashboard-table th:nth-child(2), .dashboard-table td:nth-child(2) { min-width: 90px; text-align: center; } 
+        .dashboard-table th:nth-child(3), .dashboard-table td:nth-child(3) { min-width: 100px; } 
+        .dashboard-table th:nth-child(4) { min-width: 80px; }  
+        .dashboard-table th:nth-child(5) { min-width: 70px; }  
+        .dashboard-table th:nth-child(6) { min-width: 70px; }  
+        .dashboard-table th:nth-child(7) { min-width: 70px; }  
+        .dashboard-table th:nth-child(8) { min-width: 70px; }  
+        .dashboard-table th:nth-child(9) { min-width: 80px; }  
+        .dashboard-table th:nth-child(10) { min-width: 70px; }  
+        .dashboard-table th:nth-child(11) { min-width: 90px; }  
+        .dashboard-table th:nth-child(12) { min-width: 40px; text-align: right; } 
+        .dashboard-table td:nth-child(12) { text-align: right; }
+        .dashboard-table th:nth-child(13) { min-width: 150px; } 
+        .dashboard-table th:nth-child(14) { min-width: 90px; } 
+        .dashboard-table th:nth-child(15) { min-width: 90px; } 
+        .dashboard-table th:nth-child(16) { min-width: 70px; } 
+        .dashboard-table th:nth-child(17) { min-width: 60px; text-align: right; } 
+        .dashboard-table td:nth-child(17) { text-align: right; }
+        .dashboard-table th:nth-child(18) { min-width: 50px; text-align: right; } 
+        .dashboard-table td:nth-child(18) { text-align: right; }
+        .dashboard-table th:nth-child(19) { min-width: 50px; text-align: right; } 
+        .dashboard-table td:nth-child(19) { text-align: right; }
+        .dashboard-table th:nth-child(20) { min-width: 100px; } 
+        .dashboard-table th:nth-child(21) { min-width: 90px; } 
+        .dashboard-table th:nth-child(22) { min-width: 90px; } 
+        .dashboard-table th:nth-child(23) { min-width: 90px; } 
+        .dashboard-table th:nth-child(24) { min-width: 90px; } 
+        .dashboard-table th:nth-child(25) { min-width: 50px; } 
+        .dashboard-table th:nth-child(26), .dashboard-table td:nth-child(26) { min-width: 160px; text-align: center; } 
+        .dashboard-table th:nth-child(27), .dashboard-table td:nth-child(27) { min-width: 140px; text-align: center; } 
+        .dashboard-table th:nth-child(28), .dashboard-table td:nth-child(28) { min-width: 140px; text-align: center; } 
+        .dashboard-table th:nth-child(29), .dashboard-table td:nth-child(29) { min-width: 120px; text-align: center; } 
+        .dashboard-table th:nth-child(30) { min-width: 150px; } 
+        .dashboard-table th:nth-child(31), .dashboard-table td:nth-child(31) { min-width: 120px; text-align: center; } 
+        .dashboard-table th:nth-child(32), .dashboard-table td:nth-child(32) { min-width: 70px; text-align: center; } 
+        .dashboard-table th:nth-child(33), .dashboard-table td:nth-child(33) { min-width: 50px; text-align: center; } 
+        .dashboard-table th:nth-child(34) { min-width: 180px; } 
+        .dashboard-table th:nth-child(35), .dashboard-table td:nth-child(35) { min-width: 70px; text-align: center; } 
+        .dashboard-table th:nth-child(36) { min-width: 70px; } 
+        .dashboard-table th:nth-child(37) { min-width: 60px; } 
+
+
+        .action-button, .btn-resend-notification { 
+            padding: 4px 7px;
+            font-size: 10px; 
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            color: #333;
+            text-decoration: none;
+            margin-right: 3px;
+            white-space: nowrap;
+        }
+        .action-button:hover, .btn-resend-notification:hover {
+            background-color: #e2e6ea;
+            border-color: #bbb;
+        }
+         .btn-resend-notification {
+            background-color: #ffc107; 
+            border-color: #ffc107;
+            color: #212529;
+         }
+         .btn-resend-notification:hover {
+            background-color: #e0a800;
+         }
+
+        .btn-confirm-action { 
+            padding: 5px 10px;
+            font-size: 11px;
+            border: 1px solid #6c757d;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #212529;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: normal; 
+            line-height: 1.2;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-confirm-action:hover {
+            background-color: #e2e6ea;
+            border-color: #545b62;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>社員情報ダッシュボード</h1>
+            <p>社員情報の一覧です。必要に応じて情報を更新してください。<br>旧システムの情報は <a href="#">こちら</a> (リンク先はダミー)</p>
+        </header>
+
+        <div class="filter-actions">
+            <select id="employee-filter">
+                <option value="">従業員で絞り込む</option>
+                <option value="all">全ての従業員</option>
+            </select>
+            <button id="delete-selected">チェックした項目を処理する</button>
+            <button id="reset-selected-defaults" class="btn-secondary">選択をデフォルト値に戻す</button>
+             <span class="changed-info">変更件数: <span id="changedRecordCount">0</span>件</span>
+            <button id="confirm-updates" class="btn-success">変更を確定し人事マスタを更新</button>
+            <div class="sort-options" style="margin-left:auto;"> 
+                 <select id="data-filter"> 
+                    <option value="all">表示対象: 全て</option>
+                    <option value="active">表示対象: 在籍中</option>
+                    <option value="inactive">表示対象: 退職済</option>
+                </select>
+                <select id="date-sort">
+                    <option value="desc">入社日▼</option>
+                    <option value="asc">入社日▲</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="dashboard-table" id="employeeDashboardTable">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all-header"></th>
+                    <th>ステータス</th>
+                    <th>通知方法</th>
+                    <th>社員番号</th>
+                    <th>姓</th>
+                    <th>名</th>
+                    <th>セイ</th>
+                    <th>メイ</th>
+                    <th>国籍</th>
+                    <th>性別</th>
+                    <th>生年月日</th>
+                    <th>年齢</th>
+                    <th>事業所</th>
+                    <th>入社日</th>
+                    <th>身分</th>
+                    <th>採用</th>
+                    <th>時給</th>
+                    <th>時間</th>
+                    <th>日数</th>
+                    <th>通勤手段</th>
+                    <th>社番申請日</th>
+                    <th>発送予定日</th>
+                    <th>発送日</th>
+                    <th>到着日</th>
+                    <th>返信</th>
+                    <th>入社手続き入力フォーム確認</th>
+                    <th>アップロード画像確認</th>
+                    <th>取得済みの資格確認</th>
+                    <th>扶養控除確認</th>
+                    <th>備考</th>
+                    <th>入社案内再通知</th>
+                    <th>重複候補</th>
+                    <th>再入</th>
+                    <th>メール返信先</th>
+                    <th>処理中止</th>
+                    <th>処理月</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                <tr data-record-id="1" data-employee-email="moe.naganishi@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-kakunin-chuu">確認中</span></td>
+                    <td><select class="notification-method" data-initial-value="電子通知"><option value="電子通知" selected>電子通知</option><option value="書面通知">書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395102">395102</td>
+                    <td contenteditable="true" data-initial-value="長西">長西</td>
+                    <td contenteditable="true" data-initial-value="萌">萌</td>
+                    <td contenteditable="true" data-initial-value="ナガニシ">ナガニシ</td>
+                    <td contenteditable="true" data-initial-value="モエ">モエ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="女"><option value="男">男</option><option value="女" selected>女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="2006/04/05">2006/04/05</td>
+                    <td>19</td>
+                    <td contenteditable="true" data-initial-value="ニトリ東京本社社員食堂">ニトリ東京本社社員食堂</td>
+                    <td contenteditable="true" data-initial-value="25/05/12">25/05/12</td>
+                    <td><select data-initial-value="サ"><option value="サ" selected>サプラー</option><option value="契">契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value="中"><option value="新">新卒</option><option value="中" selected>中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1850">1,850</td>
+                    <td contenteditable="true" data-initial-value="4.0">4.0</td>
+                    <td contenteditable="true" data-initial-value="8">8</td>
+                    <td contenteditable="true" data-initial-value="電車">電車</td>
+                    <td contenteditable="true" data-initial-value="25/04/25">25/04/25</td>
+                    <td contenteditable="true" data-initial-value="25/04/26">25/04/26</td>
+                    <td contenteditable="true" data-initial-value="25/04/28">25/04/28</td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value="未">未</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="契約書データ送る">契約書データ送る</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="101556@j.leoc-japan.com">101556@j.leoc-japan.com</td>
+                    <td><input type="checkbox" checked></td>
+                    <td contenteditable="true" data-initial-value="05">05</td>
+                    <td contenteditable="true" data-initial-value="竹林">竹林</td>
+                </tr>
+                <tr data-record-id="2" data-employee-email="riho.takebayashi@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-kanryo">完了済み</span></td>
+                    <td><select class="notification-method" data-initial-value="書面通知"><option value="電子通知">電子通知</option><option value="書面通知" selected>書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395103">395103</td>
+                    <td contenteditable="true" data-initial-value="竹林">竹林</td>
+                    <td contenteditable="true" data-initial-value="璃歩">璃歩</td>
+                    <td contenteditable="true" data-initial-value="タケバヤシ">タケバヤシ</td>
+                    <td contenteditable="true" data-initial-value="リホ">リホ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="女"><option value="男">男</option><option value="女" selected>女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1997/10/11">1997/10/11</td>
+                    <td>27</td>
+                    <td contenteditable="true" data-initial-value="QVC海浜幕張">QVC海浜幕張</td>
+                    <td contenteditable="true" data-initial-value="25/05/08">25/05/08</td>
+                    <td><select data-initial-value="契"><option value="サ">サプラー</option><option value="契" selected>契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value=""><option value="" selected>選択</option><option value="新">新卒</option><option value="中">中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="50,000">50,000</td>
+                    <td contenteditable="true" data-initial-value="8.0">8.0</td>
+                    <td contenteditable="true" data-initial-value="22">22</td>
+                    <td contenteditable="true" data-initial-value="徒歩">徒歩</td>
+                    <td contenteditable="true" data-initial-value="25/04/25">25/04/25</td>
+                    <td contenteditable="true" data-initial-value="25/04/26">25/04/26</td>
+                    <td contenteditable="true" data-initial-value="25/04/28">25/04/28</td>
+                    <td contenteditable="true" data-initial-value="25/05/01">25/05/01</td>
+                    <td contenteditable="true" data-initial-value="済">済</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="4/26発送">4/26発送</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="yuta.kobayashi@onodera-group.jp">yuta.kobayashi@onodera-group.jp</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="05">05</td>
+                    <td contenteditable="true" data-initial-value="内藤">内藤</td>
+                </tr>
+                <tr data-record-id="3" data-employee-email="taro.yamada@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-mitouchaku">未着手</span></td>
+                    <td><select class="notification-method" data-initial-value="電子通知"><option value="電子通知" selected>電子通知</option><option value="書面通知">書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395104">395104</td>
+                    <td contenteditable="true" data-initial-value="山田">山田</td>
+                    <td contenteditable="true" data-initial-value="太郎">太郎</td>
+                    <td contenteditable="true" data-initial-value="ヤマダ">ヤマダ</td>
+                    <td contenteditable="true" data-initial-value="タロウ">タロウ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="男"><option value="男" selected>男</option><option value="女">女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1990/01/15">1990/01/15</td>
+                    <td>34</td>
+                    <td contenteditable="true" data-initial-value="LEOCキッチン(キッチンカー)">LEOCキッチン(キッチンカー)</td>
+                    <td contenteditable="true" data-initial-value="25/06/01">25/06/01</td>
+                    <td><select data-initial-value="正"><option value="サ">サプラー</option><option value="契">契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正" selected>正社員</option></select></td>
+                    <td><select data-initial-value="新"><option value="新" selected>新卒</option><option value="中">中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="300,000">300,000</td>
+                    <td contenteditable="true" data-initial-value="8.0">8.0</td>
+                    <td contenteditable="true" data-initial-value="20">20</td>
+                    <td contenteditable="true" data-initial-value="自転車">自転車</td>
+                    <td contenteditable="true" data-initial-value="25/05/15">25/05/15</td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value="未">未</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox" checked></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="hr-dept@example.com">hr-dept@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="06">06</td>
+                    <td contenteditable="true" data-initial-value="佐藤">佐藤</td>
+                </tr>
+                <tr data-record-id="4" data-employee-email="hanako.suzuki@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-shuusei-irai">修正依頼中</span></td>
+                    <td><select class="notification-method" data-initial-value="その他"><option value="電子通知">電子通知</option><option value="書面通知">書面通知</option><option value="その他" selected>その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395105">395105</td>
+                    <td contenteditable="true" data-initial-value="鈴木">鈴木</td>
+                    <td contenteditable="true" data-initial-value="花子">花子</td>
+                    <td contenteditable="true" data-initial-value="スズキ">スズキ</td>
+                    <td contenteditable="true" data-initial-value="ハナコ">ハナコ</td>
+                    <td contenteditable="true" data-initial-value="ブラジル">ブラジル</td>
+                    <td><select data-initial-value="女"><option value="男">男</option><option value="女" selected>女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1985/07/22">1985/07/22</td>
+                    <td>39</td>
+                    <td contenteditable="true" data-initial-value="資生堂学園">資生堂学園</td>
+                    <td contenteditable="true" data-initial-value="24/12/10">24/12/10</td>
+                    <td><select data-initial-value="サ"><option value="サ" selected>サプラー</option><option value="契">契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value="他"><option value="新">新卒</option><option value="中">中途</option><option value="他" selected>その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="2100">2,100</td>
+                    <td contenteditable="true" data-initial-value="6.0">6.0</td>
+                    <td contenteditable="true" data-initial-value="15">15</td>
+                    <td contenteditable="true" data-initial-value="車">車</td>
+                    <td contenteditable="true" data-initial-value="24/11/20">24/11/20</td>
+                    <td contenteditable="true" data-initial-value="24/11/22">24/11/22</td>
+                    <td contenteditable="true" data-initial-value="24/11/25">24/11/25</td>
+                    <td contenteditable="true" data-initial-value="24/11/28">24/11/28</td>
+                    <td contenteditable="true" data-initial-value="済">済</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="在留カード確認要">在留カード確認要</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox" checked></td>
+                    <td contenteditable="true" data-initial-value="global-hr@example.com">global-hr@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="12">12</td>
+                    <td contenteditable="true" data-initial-value="田中">田中</td>
+                </tr>
+                <tr data-record-id="5" data-employee-email="kenji.ito@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-kakunin-chuu">確認中</span></td>
+                    <td><select class="notification-method" data-initial-value="電子通知"><option value="電子通知" selected>電子通知</option><option value="書面通知">書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395106">395106</td>
+                    <td contenteditable="true" data-initial-value="伊藤">伊藤</td>
+                    <td contenteditable="true" data-initial-value="健二">健二</td>
+                    <td contenteditable="true" data-initial-value="イトウ">イトウ</td>
+                    <td contenteditable="true" data-initial-value="ケンジ">ケンジ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="男"><option value="男" selected>男</option><option value="女">女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="2000/11/01">2000/11/01</td>
+                    <td>24</td>
+                    <td contenteditable="true" data-initial-value="SUBARU藤阿久寮">SUBARU藤阿久寮</td>
+                    <td contenteditable="true" data-initial-value="25/07/01">25/07/01</td>
+                    <td><select data-initial-value="107"><option value="サ">サプラー</option><option value="契">契約社員</option><option value="107" selected>107</option><option value="地">地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value="中"><option value="新">新卒</option><option value="中" selected>中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1,200">1,200</td>
+                    <td contenteditable="true" data-initial-value="7.5">7.5</td>
+                    <td contenteditable="true" data-initial-value="21">21</td>
+                    <td contenteditable="true" data-initial-value="バス">バス</td>
+                    <td contenteditable="true" data-initial-value="25/06/10">25/06/10</td>
+                    <td contenteditable="true" data-initial-value="25/06/12">25/06/12</td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value="未">未</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="交通費申請待ち">交通費申請待ち</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="recruitment@example.com">recruitment@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="07">07</td>
+                    <td contenteditable="true" data-initial-value="渡辺">渡辺</td>
+                </tr>
+                <tr data-record-id="6" data-employee-email="yuki.sato@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-kanryo">完了済み</span></td>
+                    <td><select class="notification-method" data-initial-value="書面通知"><option value="電子通知">電子通知</option><option value="書面通知" selected>書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395107">395107</td>
+                    <td contenteditable="true" data-initial-value="佐藤">佐藤</td>
+                    <td contenteditable="true" data-initial-value="由紀">由紀</td>
+                    <td contenteditable="true" data-initial-value="サトウ">サトウ</td>
+                    <td contenteditable="true" data-initial-value="ユキ">ユキ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="女"><option value="男">男</option><option value="女" selected>女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1995/03/10">1995/03/10</td>
+                    <td>29</td>
+                    <td contenteditable="true" data-initial-value="京都建築大">京都建築大</td>
+                    <td contenteditable="true" data-initial-value="25/02/01">25/02/01</td>
+                    <td><select data-initial-value="地"><option value="サ">サプラー</option><option value="契">契約社員</option><option value="107">107</option><option value="地" selected>地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value="中"><option value="新">新卒</option><option value="中" selected>中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="250,000">250,000</td>
+                    <td contenteditable="true" data-initial-value="8.0">8.0</td>
+                    <td contenteditable="true" data-initial-value="20">20</td>
+                    <td contenteditable="true" data-initial-value="電車">電車</td>
+                    <td contenteditable="true" data-initial-value="25/01/15">25/01/15</td>
+                    <td contenteditable="true" data-initial-value="25/01/16">25/01/16</td>
+                    <td contenteditable="true" data-initial-value="25/01/17">25/01/17</td>
+                    <td contenteditable="true" data-initial-value="25/01/20">25/01/20</td>
+                    <td contenteditable="true" data-initial-value="済">済</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="全て完了">全て完了</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="kyoto-branch@example.com">kyoto-branch@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="02">02</td>
+                    <td contenteditable="true" data-initial-value="吉田">吉田</td>
+                </tr>
+                <tr data-record-id="7" data-employee-email="daisuke.tanaka@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-mitouchaku">未着手</span></td>
+                    <td><select class="notification-method" data-initial-value="電子通知"><option value="電子通知" selected>電子通知</option><option value="書面通知">書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395108">395108</td>
+                    <td contenteditable="true" data-initial-value="田中">田中</td>
+                    <td contenteditable="true" data-initial-value="大輔">大輔</td>
+                    <td contenteditable="true" data-initial-value="タナカ">タナカ</td>
+                    <td contenteditable="true" data-initial-value="ダイスケ">ダイスケ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="男"><option value="男" selected>男</option><option value="女">女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1988/08/20">1988/08/20</td>
+                    <td>36</td>
+                    <td contenteditable="true" data-initial-value="天ぷら 銀座おのでら並木通り">天ぷら 銀座おのでら並木通り</td>
+                    <td contenteditable="true" data-initial-value="25/08/15">25/08/15</td>
+                    <td><select data-initial-value="サ"><option value="サ" selected>サプラー</option><option value="契">契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value="中"><option value="新">新卒</option><option value="中" selected>中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1980">1,980</td>
+                    <td contenteditable="true" data-initial-value="5.0">5.0</td>
+                    <td contenteditable="true" data-initial-value="10">10</td>
+                    <td contenteditable="true" data-initial-value="バイク">バイク</td>
+                    <td contenteditable="true" data-initial-value="25/07/25">25/07/25</td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value="未">未</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="採用手続き中">採用手続き中</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="ginza-info@example.com">ginza-info@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="08">08</td>
+                    <td contenteditable="true" data-initial-value="中村">中村</td>
+                </tr>
+                <tr data-record-id="8" data-employee-email="maria.silva@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-shuusei-irai">修正依頼中</span></td>
+                    <td><select class="notification-method" data-initial-value="その他"><option value="電子通知">電子通知</option><option value="書面通知">書面通知</option><option value="その他" selected>その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395109">395109</td>
+                    <td contenteditable="true" data-initial-value="シルバ">シルバ</td>
+                    <td contenteditable="true" data-initial-value="マリア">マリア</td>
+                    <td contenteditable="true" data-initial-value="シルバ">シルバ</td>
+                    <td contenteditable="true" data-initial-value="マリア">マリア</td>
+                    <td contenteditable="true" data-initial-value="ポルトガル">ポルトガル</td>
+                    <td><select data-initial-value="女"><option value="男">男</option><option value="女" selected>女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1992/12/01">1992/12/01</td>
+                    <td>32</td>
+                    <td contenteditable="true" data-initial-value="SME東京ミッドタウン">SME東京ミッドタウン</td>
+                    <td contenteditable="true" data-initial-value="25/09/01">25/09/01</td>
+                    <td><select data-initial-value="契"><option value="サ">サプラー</option><option value="契" selected>契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value="他"><option value="新">新卒</option><option value="中">中途</option><option value="他" selected>その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1,350">1,350</td>
+                    <td contenteditable="true" data-initial-value="7.0">7.0</td>
+                    <td contenteditable="true" data-initial-value="18">18</td>
+                    <td contenteditable="true" data-initial-value="電車">電車</td>
+                    <td contenteditable="true" data-initial-value="25/08/10">25/08/10</td>
+                    <td contenteditable="true" data-initial-value="25/08/12">25/08/12</td>
+                    <td contenteditable="true" data-initial-value="25/08/13">25/08/13</td>
+                    <td contenteditable="true" data-initial-value=""></td>
+                    <td contenteditable="true" data-initial-value="修正待ち">修正待ち</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="ビザ情報更新依頼">ビザ情報更新依頼</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox" checked></td>
+                    <td contenteditable="true" data-initial-value="sme-support@example.com">sme-support@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="09">09</td>
+                    <td contenteditable="true" data-initial-value="伊藤">伊藤</td>
+                </tr>
+                <tr data-record-id="9" data-employee-email="akira.watanabe@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-kakunin-chuu">確認中</span></td>
+                    <td><select class="notification-method" data-initial-value="電子通知"><option value="電子通知" selected>電子通知</option><option value="書面通知">書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395110">395110</td>
+                    <td contenteditable="true" data-initial-value="渡辺">渡辺</td>
+                    <td contenteditable="true" data-initial-value="明">明</td>
+                    <td contenteditable="true" data-initial-value="ワタナベ">ワタナベ</td>
+                    <td contenteditable="true" data-initial-value="アキラ">アキラ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="男"><option value="男" selected>男</option><option value="女">女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1975/05/15">1975/05/15</td>
+                    <td>49</td>
+                    <td contenteditable="true" data-initial-value="カレッジコート八幡山">カレッジコート八幡山</td>
+                    <td contenteditable="true" data-initial-value="25/03/20">25/03/20</td>
+                    <td><select data-initial-value="正"><option value="サ">サプラー</option><option value="契">契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正" selected>正社員</option></select></td>
+                    <td><select data-initial-value="中"><option value="新">新卒</option><option value="中" selected>中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="350,000">350,000</td>
+                    <td contenteditable="true" data-initial-value="8.0">8.0</td>
+                    <td contenteditable="true" data-initial-value="22">22</td>
+                    <td contenteditable="true" data-initial-value="徒歩">徒歩</td>
+                    <td contenteditable="true" data-initial-value="25/03/01">25/03/01</td>
+                    <td contenteditable="true" data-initial-value="25/03/05">25/03/05</td>
+                    <td contenteditable="true" data-initial-value="25/03/06">25/03/06</td>
+                    <td contenteditable="true" data-initial-value="25/03/08">25/03/08</td>
+                    <td contenteditable="true" data-initial-value="確認済">確認済</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="管理者確認中">管理者確認中</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox" checked></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="college-court-admin@example.com">college-court-admin@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="03">03</td>
+                    <td contenteditable="true" data-initial-value="木村">木村</td>
+                </tr>
+                <tr data-record-id="10" data-employee-email="kaori.kobayashi@example.com">
+                    <td><input type="checkbox" name="procedure-select" class="row-checkbox"></td>
+                    <td><span class="status-badge status-kanryo">完了済み</span></td>
+                    <td><select class="notification-method" data-initial-value="書面通知"><option value="電子通知">電子通知</option><option value="書面通知" selected>書面通知</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="395111">395111</td>
+                    <td contenteditable="true" data-initial-value="小林">小林</td>
+                    <td contenteditable="true" data-initial-value="かおり">かおり</td>
+                    <td contenteditable="true" data-initial-value="コバヤシ">コバヤシ</td>
+                    <td contenteditable="true" data-initial-value="カオリ">カオリ</td>
+                    <td contenteditable="true" data-initial-value="日本">日本</td>
+                    <td><select data-initial-value="女"><option value="男">男</option><option value="女" selected>女</option><option value="その他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1999/06/25">1999/06/25</td>
+                    <td>25</td>
+                    <td contenteditable="true" data-initial-value="DBJ丸山寮">DBJ丸山寮</td>
+                    <td contenteditable="true" data-initial-value="25/04/01">25/04/01</td>
+                    <td><select data-initial-value="サ"><option value="サ" selected>サプラー</option><option value="契">契約社員</option><option value="107">107</option><option value="地">地域</option><option value="正">正社員</option></select></td>
+                    <td><select data-initial-value="新"><option value="新" selected>新卒</option><option value="中">中途</option><option value="他">その他</option></select></td>
+                    <td contenteditable="true" data-initial-value="1650">1,650</td>
+                    <td contenteditable="true" data-initial-value="3.5">3.5</td>
+                    <td contenteditable="true" data-initial-value="12">12</td>
+                    <td contenteditable="true" data-initial-value="バス">バス</td>
+                    <td contenteditable="true" data-initial-value="25/03/10">25/03/10</td>
+                    <td contenteditable="true" data-initial-value="25/03/11">25/03/11</td>
+                    <td contenteditable="true" data-initial-value="25/03/12">25/03/12</td>
+                    <td contenteditable="true" data-initial-value="25/03/15">25/03/15</td>
+                    <td contenteditable="true" data-initial-value="済">済</td>
+                    <td><button class="btn-confirm-action" onclick="alert('フォーム確認（ダミー）')">フォーム確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('画像確認（ダミー）')">画像確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('資格確認（ダミー）')">資格確認</button></td>
+                    <td><button class="btn-confirm-action" onclick="alert('扶養確認（ダミー）')">扶養確認</button></td>
+                    <td contenteditable="true" data-initial-value="手続き完了">手続き完了</td>
+                    <td><button class="btn-resend-notification">再通知</button></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="dbj-maruyama-hr@example.com">dbj-maruyama-hr@example.com</td>
+                    <td><input type="checkbox"></td>
+                    <td contenteditable="true" data-initial-value="04">04</td>
+                    <td contenteditable="true" data-initial-value="鈴木">鈴木</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableBody = document.getElementById('employeeTableBody');
+            const selectAllHeader = document.getElementById('select-all-header');
+            const deleteButton = document.getElementById('delete-selected');
+            const resetSelectedButton = document.getElementById('reset-selected-defaults');
+            const confirmUpdatesButton = document.getElementById('confirm-updates');
+            const changedRecordCountSpan = document.getElementById('changedRecordCount');
+
+            function updateChangedRecordCount() {
+                if (!tableBody) return;
+                const changedCells = tableBody.querySelectorAll('td.highlight-changed, td select.highlight-changed');
+                const changedRecordIds = new Set();
+                changedCells.forEach(el => { 
+                    const row = el.closest('tr');
+                    if (row && row.dataset.recordId) {
+                        changedRecordIds.add(row.dataset.recordId);
+                    }
+                });
+                if (changedRecordCountSpan) {
+                     changedRecordCountSpan.textContent = changedRecordIds.size;
+                }
+            }
+            
+            function handleNotificationMethodChange(selectElement) {
+                const selectedValue = selectElement.value;
+                if (selectedValue === '書面通知' || selectedValue === 'その他') {
+                    selectElement.classList.add('highlight-purple');
+                } else {
+                    selectElement.classList.remove('highlight-purple');
+                }
+                const initialValue = selectElement.dataset.initialValue || '';
+                if (initialValue !== selectedValue) {
+                    selectElement.classList.add('highlight-changed');
+                } else {
+                    selectElement.classList.remove('highlight-changed');
+                }
+            }
+
+            if (tableBody) {
+                tableBody.addEventListener('blur', function(event) {
+                    const cell = event.target;
+                    if (cell.tagName === 'TD' && cell.isContentEditable) {
+                        const initialValue = cell.dataset.initialValue || '';
+                        const currentValue = cell.textContent.trim();
+                        if (initialValue !== currentValue) {
+                            cell.classList.add('highlight-changed');
+                        } else {
+                            cell.classList.remove('highlight-changed');
+                        }
+                        updateChangedRecordCount();
+                    }
+                }, true);
+
+                tableBody.addEventListener('change', function(event) {
+                    const targetElement = event.target;
+                    if (targetElement.tagName === 'SELECT') {
+                        if (targetElement.classList.contains('notification-method')) {
+                            handleNotificationMethodChange(targetElement); 
+                        } else {
+                             const initialValue = targetElement.dataset.initialValue || '';
+                             const currentValue = targetElement.value;
+                             if (initialValue !== currentValue) {
+                                targetElement.classList.add('highlight-changed'); 
+                            } else {
+                                targetElement.classList.remove('highlight-changed');
+                            }
+                        }
+                        updateChangedRecordCount();
+                    }
+                });
+                
+                tableBody.querySelectorAll('select.notification-method').forEach(sel => {
+                    handleNotificationMethodChange(sel);
+                });
+
+                tableBody.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('btn-resend-notification')) {
+                        const row = event.target.closest('tr');
+                        const employeeEmail = row.dataset.employeeEmail || '不明なメールアドレス';
+                        const replyToCell = row.querySelector('td:nth-child(34)'); 
+                        const replyToEmail = replyToCell ? replyToCell.textContent.trim() : '（メール返信先不明）';
+                        alert(`社員 (${employeeEmail}) およびメール返信先 (${replyToEmail}) へ入社案内を再通知しました。（ダミー）`);
+                    }
+                });
+            }
+            
+            if (tableBody) {
+                const selects = tableBody.querySelectorAll('td select');
+                selects.forEach(select => {
+                    if (!select.classList.contains('notification-method')) { // notification-method handles its own 'changed'
+                        const initialValue = select.dataset.initialValue || '';
+                        const currentValue = select.value;
+                         if (initialValue !== currentValue) {
+                            select.classList.add('highlight-changed');
+                        } else {
+                            select.classList.remove('highlight-changed');
+                        }
+                    }
+                });
+                 updateChangedRecordCount(); 
+            }
+
+            if (selectAllHeader) {
+                selectAllHeader.addEventListener('change', function() {
+                    const currentCheckboxes = tableBody.querySelectorAll('input.row-checkbox');
+                    currentCheckboxes.forEach(checkbox => {
+                        checkbox.checked = selectAllHeader.checked;
+                    });
+                });
+            }
+            
+            const staticRowCheckboxes = tableBody.querySelectorAll('input.row-checkbox');
+            staticRowCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (!this.checked) {
+                        selectAllHeader.checked = false;
+                    } else {
+                        let allChecked = true;
+                        const currentCheckboxes = tableBody.querySelectorAll('input.row-checkbox');
+                        currentCheckboxes.forEach(cb => {
+                            if (!cb.checked) {
+                                allChecked = false;
+                            }
+                        });
+                        selectAllHeader.checked = allChecked;
+                    }
+                });
+            });
+
+            if (deleteButton) {
+                deleteButton.addEventListener('click', function() {
+                    const selectedCheckboxes = tableBody.querySelectorAll('input.row-checkbox:checked');
+                    if (selectedCheckboxes.length > 0) {
+                        alert(`${selectedCheckboxes.length} 件の項目が選択されています。処理を実行します。（ダミー）`);
+                    } else {
+                        alert('処理する項目を選択してください。');
+                    }
+                });
+            }
+
+            if (resetSelectedButton) {
+                resetSelectedButton.addEventListener('click', function() {
+                    const selectedRows = tableBody.querySelectorAll('input.row-checkbox:checked');
+                    if (selectedRows.length === 0) {
+                        alert('デフォルト値に戻す行を選択してください。');
+                        return;
+                    }
+                    selectedRows.forEach(checkbox => {
+                        const row = checkbox.closest('tr');
+                        if (row) {
+                            const editableCells = row.querySelectorAll('td[contenteditable="true"]');
+                            editableCells.forEach(cell => {
+                                cell.textContent = cell.dataset.initialValue || '';
+                                cell.classList.remove('highlight-changed');
+                            });
+                            const selectsInRow = row.querySelectorAll('td select');
+                            selectsInRow.forEach(select => {
+                                select.value = select.dataset.initialValue || '';
+                                if (select.classList.contains('notification-method')) {
+                                    handleNotificationMethodChange(select); 
+                                } else {
+                                   select.classList.remove('highlight-changed');
+                                }
+                            });
+                        }
+                    });
+                    updateChangedRecordCount();
+                });
+            }
+
+            if (confirmUpdatesButton) {
+                confirmUpdatesButton.addEventListener('click', function() {
+                    const changedElements = tableBody.querySelectorAll('.highlight-changed');
+                    if (changedElements.length > 0) {
+                         const recordIdsToUpdate = new Set();
+                         changedElements.forEach(el => {
+                            const row = el.closest('tr');
+                            if(row && row.dataset.recordId) recordIdsToUpdate.add(row.dataset.recordId);
+                         });
+                        alert(`${recordIdsToUpdate.size} 件のレコードに変更があります。人事マスタを更新します。（ダミー）\n対象ID: ${Array.from(recordIdsToUpdate).join(', ')}`);
+                        
+                        changedElements.forEach(el => el.classList.remove('highlight-changed'));
+                        
+                        tableBody.querySelectorAll('td[contenteditable="true"]').forEach(cell => {
+                            cell.dataset.initialValue = cell.textContent.trim();
+                        });
+                        tableBody.querySelectorAll('td select').forEach(select => {
+                            select.dataset.initialValue = select.value;
+                            if (select.classList.contains('notification-method')) {
+                                handleNotificationMethodChange(select); // re-check purple
+                            }
+                        });
+                        updateChangedRecordCount();
+
+                    } else {
+                        alert('変更されたレコードはありません。');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

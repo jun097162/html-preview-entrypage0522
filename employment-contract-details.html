@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEOCシステム | 社員番号 発行申請 契約詳細</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 900px;
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: auto 1fr; /* ラベルと入力欄 */
+            gap: 10px 15px; /* 行間と列間 */
+            align-items: center; /* 垂直方向中央揃え */
+        }
+        .form-grid-full-width {
+            grid-column: 1 / -1; /* 全幅 */
+        }
+        label {
+            font-weight: bold;
+            text-align: right;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 95%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .time-input-group input[type="text"],
+        .time-input-group input[type="number"] {
+            width: 40px;
+            text-align: center;
+        }
+        .currency-input {
+            width: 100px !important;
+            text-align: right;
+        }
+        .postal-code-group input[type="text"] {
+            width: 100px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+        .cancel-button {
+            background-color: #6c757d;
+            color: white;
+        }
+        .cancel-button:hover {
+            background-color: #545b62;
+        }
+        .search-button {
+            background-color: #e9ecef;
+            color: #495057;
+            border: 1px solid #ced4da;
+        }
+        .info-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .description-text {
+            font-size: 0.9em;
+            color: #555;
+            grid-column: 2 / -1; /* ラベルの隣から開始 */
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #eee;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .main-layout {
+            display: flex;
+            gap: 20px;
+        }
+        .main-form-column {
+            flex: 2;
+        }
+        .sidebar-info-column {
+            flex: 1;
+        }
+        .bottom-buttons {
+            text-align: right;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>契約詳細</h2>
+
+    <form action="#" method="post">
+        <div class="main-layout">
+            <div class="main-form-column">
+                <div class="form-section">
+                    <div class="form-grid">
+                        <label>職種</label>
+                        <div>
+                            <input type="radio" id="job_type_cook" name="job_type" value="cook_related" checked>
+                            <label for="job_type_cook" style="font-weight:normal;">調理および付随業務</label>
+                            <input type="radio" id="job_type_other" name="job_type" value="other">
+                            <label for="job_type_other" style="font-weight:normal;">その他</label>
+                            <input type="text" id="job_type_other_detail" name="job_type_other_detail" placeholder="その他職種内容" style="width: 200px; margin-left: 10px;">
+                        </div>
+
+                        <label for="shift1_start_hour">シフト1</label>
+                        <div class="time-input-group">
+                            <input type="text" id="shift1_start_hour" name="shift1_start_hour" size="2" maxlength="2"> :
+                            <input type="text" id="shift1_start_minute" name="shift1_start_minute" size="2" maxlength="2"> ～
+                            <input type="text" id="shift1_end_hour" name="shift1_end_hour" size="2" maxlength="2"> :
+                            <input type="text" id="shift1_end_minute" name="shift1_end_minute" size="2" maxlength="2">
+                            <label for="shift1_break" style="font-weight:normal; margin-left:10px;">休憩</label>
+                            <input type="number" id="shift1_break" name="shift1_break" size="3"> 分
+                        </div>
+
+                        <label for="shift2_start_hour">シフト2</label>
+                        <div class="time-input-group">
+                            <input type="text" id="shift2_start_hour" name="shift2_start_hour" size="2" maxlength="2"> :
+                            <input type="text" id="shift2_start_minute" name="shift2_start_minute" size="2" maxlength="2"> ～
+                            <input type="text" id="shift2_end_hour" name="shift2_end_hour" size="2" maxlength="2"> :
+                            <input type="text" id="shift2_end_minute" name="shift2_end_minute" size="2" maxlength="2">
+                            <label for="shift2_break" style="font-weight:normal; margin-left:10px;">休憩</label>
+                            <input type="number" id="shift2_break" name="shift2_break" size="3"> 分
+                        </div>
+
+                        <label for="extra_hourly_wage_2">第2加算時給</label>
+                        <div>
+                            <input type="number" id="extra_hourly_wage_2" name="extra_hourly_wage_2" class="currency-input"> 円
+                        </div>
+                        <label for="extra_hourly_wage_3">第3加算時給</label>
+                        <div>
+                            <input type="number" id="extra_hourly_wage_3" name="extra_hourly_wage_3" class="currency-input"> 円
+                        </div>
+                        <label for="extra_hourly_wage_4">第4加算時給</label>
+                        <div>
+                            <input type="number" id="extra_hourly_wage_4" name="extra_hourly_wage_4" class="currency-input"> 円
+                        </div>
+
+                        <label for="other_allowance_1_type">その他手当1</label>
+                        <div>
+                            <select id="other_allowance_1_type" name="other_allowance_1_type" style="width: 150px;">
+                                <option value="">選択してください</option>
+                                <option value="type_a">手当A</option>
+                                <option value="type_b">手当B</option>
+                            </select>
+                            <label for="other_allowance_1_amount" style="font-weight:normal; margin-left:5px;">手当</label>
+                            <input type="number" id="other_allowance_1_amount" name="other_allowance_1_amount" class="currency-input"> 円
+                        </div>
+                        <label for="other_allowance_2_type">その他手当2</label>
+                        <div>
+                            <select id="other_allowance_2_type" name="other_allowance_2_type" style="width: 150px;">
+                                <option value="">選択してください</option>
+                                <option value="type_c">手当C</option>
+                                <option value="type_d">手当D</option>
+                            </select>
+                            <label for="other_allowance_2_amount" style="font-weight:normal; margin-left:5px;">手当</label>
+                            <input type="number" id="other_allowance_2_amount" name="other_allowance_2_amount" class="currency-input"> 円
+                        </div>
+
+                        <label for="contract_end_date">契約終了日</label>
+                        <div>
+                            <input type="date" id="contract_end_date" name="contract_end_date" value="2025-09-30" style="width: 150px;">
+                        </div>
+                        <div class="description-text form-grid-full-width" style="grid-column: 2 / -1; margin-top: -10px;">
+                            契約社員：原則として1年以内。ただし入社日が4月～6月の場合は翌年6月末まで設定可。<br>
+                            サプラー：原則として1年以内。ただし入社日が7月～9月の場合は翌年9月末まで設定可。
+                        </div>
+
+                        <label for="contract_special_notes" style="align-self: start;">契約書特記事項</label>
+                        <div>
+                            <textarea id="contract_special_notes" name="contract_special_notes" rows="4" style="width:100%"></textarea>
+                            <p class="description-text" style="margin-top:5px; padding-left:0;">※記入した内容がそのまま契約書に印字されます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-info-column">
+                <div class="info-box">
+                    <h3>契約基本情報</h3>
+                    <p>契約時間：8時間</p>
+                    <p>契約日数：22日</p>
+                    <p>時給：2500円</p>
+                    <p>責任者手当：0円</p>
+                    <p>賞与年間：0ヶ月</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-grid">
+                <label>入社書類セット送付先</label>
+                <div>
+                    <input type="radio" id="doc_dest_home" name="doc_destination" value="home_other" checked>
+                    <label for="doc_dest_home" style="font-weight:normal;">自宅/その他</label>
+                    <input type="radio" id="doc_dest_office" name="doc_destination" value="office" style="margin-left: 20px;">
+                    <label for="doc_dest_office" style="font-weight:normal;">事業所</label>
+                </div>
+
+                <label for="postal_code">郵便番号</label>
+                <div class="postal-code-group">
+                    <input type="text" id="postal_code" name="postal_code" size="10" maxlength="8">
+                    <button type="button" class="search-button">郵便番号から検索</button>
+                </div>
+
+                <label for="address">住所</label>
+                <input type="text" id="address" name="address">
+
+                <label for="recipient_name">宛名</label>
+                <div>
+                    <input type="text" id="recipient_name" name="recipient_name" value="レオックヨシオ" style="width: 200px;"> 様
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-buttons">
+            <button type="submit" class="submit-button">申請作成</button>
+            <button type="button" class="cancel-button">戻る</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

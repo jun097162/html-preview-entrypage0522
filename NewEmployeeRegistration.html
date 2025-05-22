@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEOCシステム | 新規入社登録</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 900px;
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #444; /* 少し薄く */
+            font-size: 1.1em;
+            margin-top: 0; /* form-section内で最初の要素なので */
+            margin-bottom: 15px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr; /* ラベル幅調整 */
+            gap: 12px 15px; /* 行間と列間 */
+            align-items: center; /* 垂直方向中央揃え */
+        }
+        .form-grid-full-width {
+            grid-column: 1 / -1; /* 全幅 */
+        }
+        label, .label-equivalent {
+            font-weight: bold;
+            text-align: right;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"], /* telタイプ追加 */
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%; /* 基本全幅に */
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        /* 特定の短い入力フィールド用 */
+        .short-input { width: 180px !important; }
+        .medium-input { width: 250px !important; }
+        .x-short-input { width: 100px !important; }
+
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        .form-grid div label, .radio-options label, .checkbox-options label {
+            font-weight: normal;
+            text-align: left; /* ラジオ/チェックボックス横のラベルは左寄せ */
+        }
+
+        .name-field-group { display: flex; gap: 10px; }
+        .name-field-group input[type="text"] {
+            flex: 1; /* 均等に幅を分配 */
+        }
+
+        .date-input-group { display: flex; align-items: center; }
+        .date-input-group input[type="date"] { width: 160px; } /* 少し広げる */
+        .date-input-group .age-field { width: 60px; margin-left: 10px; margin-right: 5px; text-align: right; }
+
+        .radio-options, .checkbox-options { display: flex; align-items: center; flex-wrap: wrap; gap: 0 15px; /* オプション間のマージンをgapで */ }
+        .radio-options div, .checkbox-options div { display: flex; align-items: center; margin-bottom: 5px; /* 縦方向のオプション間隔 */ }
+
+
+        .sub-options {
+            grid-column: 2 / -1;
+            padding-left: 10px;
+            margin-top: -8px; /* 上の要素との間隔調整 */
+            margin-bottom: 8px;
+        }
+        .sub-options .radio-options div { margin-bottom: 5px; }
+
+
+        .input-with-unit { display: flex; align-items: center; }
+        .input-with-unit input[type="text"], .input-with-unit input[type="number"], .input-with-unit select {
+            width: 120px;
+            margin-right: 5px;
+        }
+        .input-with-unit .unit { white-space: nowrap; }
+
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+        .description-text {
+            font-size: 0.9em;
+            color: #555;
+            grid-column: 2 / -1;
+            line-height: 1.4;
+            margin-top: -5px; /* ラベルとの間隔調整 */
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #eee;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .bottom-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .blue-background-input {
+            background-color: #e7f3ff !important; /* 画像の青い背景により近い色に調整 */
+            border-color: #b8d6f3 !important;
+        }
+        .required-note-global {
+            font-size: 0.9em;
+            color: #333;
+            background-color: #e9ecef;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        textarea {
+            height: 80px;
+        }
+        .info-text-inline {
+            margin-left: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .hidden { /* 非表示用クラス */
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>新規入社登録</h2>
+
+    <form action="EmploymentContractDetails.html" method="post">
+        <div class="form-section">
+            <h3>入社者情報</h3>
+            <div class="form-grid">
+                <label>名前</label>
+                <div class="name-field-group">
+                    <input type="text" id="last_name" name="last_name" placeholder="姓" class="blue-background-input">
+                    <input type="text" id="first_name" name="first_name" placeholder="名" class="blue-background-input">
+                </div>
+
+                <label>ふりがな</label>
+                <div class="name-field-group">
+                    <input type="text" id="furigana_last_name" name="furigana_last_name" placeholder="せい" class="blue-background-input">
+                    <input type="text" id="furigana_first_name" name="furigana_first_name" placeholder="めい" class="blue-background-input">
+                </div>
+
+                <label for="birth_date">生年月日</label>
+                <div class="date-input-group">
+                    <input type="date" id="birth_date" name="birth_date" class="blue-background-input">
+                    <input type="text" id="age" name="age" class="age-field" readonly placeholder="年齢"> 歳
+                </div>
+                <div class="description-text">（和暦で表示されます）</div>
+
+
+                <label>性別</label>
+                <div class="radio-options">
+                    <div><input type="radio" id="gender_male" name="gender" value="male" class="blue-background-input"> <label for="gender_male">男性</label></div>
+                    <div><input type="radio" id="gender_female" name="gender" value="female" checked class="blue-background-input"> <label for="gender_female">女性</label></div>
+                </div>
+
+                <label for="mobile_phone">携帯電話番号</label>
+                <input type="tel" id="mobile_phone" name="mobile_phone" placeholder="例: 090-1234-5678" class="blue-background-input medium-input">
+
+                <label for="email">メールアドレス</label>
+                <input type="email" id="email" name="email" placeholder="例: leoc@example.com" class="blue-background-input">
+
+                <label>国籍</label>
+                <div class="radio-options">
+                     <div><input type="radio" id="nationality_japan" name="nationality" value="japan" checked class="blue-background-input"> <label for="nationality_japan">日本人</label></div>
+                     <div><input type="radio" id="nationality_foreign" name="nationality" value="foreign" class="blue-background-input"> <label for="nationality_foreign">外国籍</label></div>
+                </div>
+
+                <div class="sub-options hidden" id="foreign_status_options_wrapper"> <!-- 初期非表示 -->
+                    <div class="radio-options">
+                        <div><input type="radio" id="foreign_student" name="foreign_status" value="student"> <label for="foreign_student">留学生</label></div>
+                        <div><input type="radio" id="foreign_family" name="foreign_status" value="family"> <label for="foreign_family">家族滞在</label></div>
+                        <div><input type="radio" id="foreign_specific" name="foreign_status" value="specific_activities"> <label for="foreign_specific">特定活動</label></div>
+                    </div>
+                     <div class="radio-options" style="margin-top: 5px;">
+                        <div><input type="radio" id="foreign_other" name="foreign_status" value="other_permanent_resident"> <label for="foreign_other">上記以外（外国籍永住者 等）</label></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>契約基本情報</h3>
+            <div class="form-grid">
+                <label>社員区分</label>
+                <div class="radio-options">
+                    <div><input type="radio" id="emp_type_supplier" name="employee_type" value="supplier" checked class="blue-background-input"> <label for="emp_type_supplier">サプラー</label></div>
+                    <div><input type="radio" id="emp_type_contract107" name="employee_type" value="contract107" class="blue-background-input"> <label for="emp_type_contract107">契約社員107</label></div>
+                    <div><input type="radio" id="emp_type_contract" name="employee_type" value="contract" class="blue-background-input"> <label for="emp_type_contract">契約社員</label></div>
+                    <div style="width:100%; height:0; margin:0; padding:0; grid-column: 1 / -1;"></div> <!-- 改行用 -->
+                    <div><input type="radio" id="emp_type_local_fulltime" name="employee_type" value="local_fulltime" class="blue-background-input"> <label for="emp_type_local_fulltime">地域正社員</label></div>
+                    <div><input type="radio" id="emp_type_fulltime" name="employee_type" value="fulltime" class="blue-background-input"> <label for="emp_type_fulltime">正社員</label></div>
+                </div>
+
+                <label for="joining_date">入社日</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="date" id="joining_date" name="joining_date" class="blue-background-input short-input">
+                    <input type="checkbox" id="re_joining" name="re_joining" style="margin-left: 15px;">
+                    <label for="re_joining" style="font-weight: normal; margin-left: 2px;">再入社 (以前LEOCに在籍していたことがある)</label>
+                </div>
+
+                <label for="office_code">事業所コード</label>
+                <div class="input-with-unit">
+                    <input type="text" id="office_code" name="office_code" value="314479" class="x-short-input">
+                    <span class="info-text-inline">みずほ銀行調布</span>
+                </div>
+
+                <label for="contract_hours">契約時間</label>
+                <div>
+                    <div class="input-with-unit">
+                        <input type="text" id="contract_hours" name="contract_hours" class="x-short-input">
+                        <span class="unit">時間</span>
+                    </div>
+                    <p class="description-text" style="grid-column: 1 / -1; margin-left:0; margin-top: 5px;">※1日あたりの平均。フルタイムの場合は8時間</p>
+                </div>
+
+
+                <label for="contract_days">契約日数</label>
+                <div>
+                    <div class="input-with-unit">
+                        <input type="text" id="contract_days" name="contract_days" value="22" class="x-short-input">
+                        <span class="unit">日</span>
+                    </div>
+                    <p class="description-text" style="grid-column: 1 / -1; margin-left:0; margin-top: 5px;">※1ヶ月あたり。フルタイムの場合は22日</p>
+                </div>
+
+
+                <label for="hourly_wage">時給</label>
+                <div class="input-with-unit">
+                    <input type="text" id="hourly_wage" name="hourly_wage" class="short-input">
+                    <span class="unit">円</span>
+                </div>
+
+                <label for="position">役職</label>
+                <select id="position" name="position" class="short-input">
+                    <option value=""></option>
+                    <option value="staff">スタッフ</option>
+                    <option value="leader">リーダー</option>
+                    <option value="manager">マネージャー</option>
+                </select>
+
+                <label for="responsibility_allowance">責任者手当</label>
+                <div class="input-with-unit">
+                    <input type="text" id="responsibility_allowance" name="responsibility_allowance" class="short-input">
+                    <span class="unit">円</span>
+                </div>
+
+                <label for="annual_bonus_months">賞与年間</label>
+                <div class="input-with-unit">
+                    <select id="annual_bonus_months" name="annual_bonus_months" class="x-short-input">
+                        <option value=""></option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    <span class="unit">ヶ月分</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="required-note-global">背景が青の箇所は記入必須</div>
+
+        <div class="form-section">
+            <div class="form-grid">
+                <label class="label-equivalent">電子申請</label>
+                <div class="radio-options">
+                    <div><input type="radio" id="e_apply_yes" name="e_apply_preference" value="yes" checked> <label for="e_apply_yes">する</label></div>
+                    <div><input type="radio" id="e_apply_no" name="e_apply_preference" value="no"> <label for="e_apply_no">しない</label></div>
+                </div>
+
+                <div class="sub-options hidden" id="e_apply_send_to_options_wrapper"> <!-- 初期非表示 -->
+                     <label class="label-equivalent" style="font-weight: normal; grid-column: 1 / 1; text-align: left; padding-left: 0; margin-bottom:5px;">送付先</label>
+                    <div class="radio-options" style="grid-column: 1 / -1; margin-top: 0px;">
+                        <div><input type="radio" id="e_apply_send_home" name="e_apply_send_to" value="home" checked> <label for="e_apply_send_home">自宅</label></div>
+                        <div><input type="radio" id="e_apply_send_office" name="e_apply_send_to" value="office"> <label for="e_apply_send_office">事業所</label></div>
+                    </div>
+                </div>
+
+
+                <label for="contact_notes" style="align-self: start;">入社処理担当者への<br>連絡事項</label>
+                <textarea id="contact_notes" name="contact_notes"></textarea>
+
+                <label for="reply_email_address">返信先メールアドレス</label>
+                <input type="email" id="reply_email_address" name="reply_email_address" value="314479@j.leoc-j.com" class="medium-input">
+            </div>
+        </div>
+        
+        <div class="description-text form-grid-full-width" style="text-align:center; margin-bottom: 20px; padding-left: 15px; padding-right: 15px; grid-column: 1 / -1;">
+            申請作成ボタンを押下しますとメール画面が表示されますのでそのままメールを送信して下さい。<br>
+            すぐに申請結果メールが返信送信されますのでメールソフトの「受信」をクリックしてご確認ください。
+        </div>
+
+        <div class="bottom-buttons">
+            <button type="submit" class="submit-button">契約詳細へ</button>
+        </div>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 年齢計算
+        const birthDateInput = document.getElementById('birth_date');
+        const ageField = document.getElementById('age');
+
+        if (birthDateInput && ageField) {
+            birthDateInput.addEventListener('change', function() {
+                if (this.value) {
+                    const birthDate = new Date(this.value);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    ageField.value = age >= 0 ? age : '';
+                } else {
+                    ageField.value = '';
+                }
+            });
+            // 初期値があれば年齢計算を実行
+            if (birthDateInput.value) {
+                 birthDateInput.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // 国籍による外国籍ステータスオプションの表示/非表示
+        const nationalityRadios = document.querySelectorAll('input[name="nationality"]');
+        const foreignStatusWrapper = document.getElementById('foreign_status_options_wrapper');
+
+        function toggleForeignStatusOptions() {
+            if (document.getElementById('nationality_foreign').checked) {
+                foreignStatusWrapper.classList.remove('hidden');
+            } else {
+                foreignStatusWrapper.classList.add('hidden');
+                const foreignStatusRadios = foreignStatusWrapper.querySelectorAll('input[name="foreign_status"]');
+                foreignStatusRadios.forEach(radio => radio.checked = false);
+            }
+        }
+        nationalityRadios.forEach(radio => radio.addEventListener('change', toggleForeignStatusOptions));
+        toggleForeignStatusOptions(); 
+
+
+        // 電子申請「しない」選択時の送付先オプション表示/非表示
+        const eApplyRadios = document.querySelectorAll('input[name="e_apply_preference"]');
+        const eApplySendToWrapper = document.getElementById('e_apply_send_to_options_wrapper');
+
+        function toggleEApplySendToOptions() {
+            if (document.getElementById('e_apply_no').checked) {
+                eApplySendToWrapper.classList.remove('hidden');
+            } else {
+                eApplySendToWrapper.classList.add('hidden');
+                const sendToRadios = eApplySendToWrapper.querySelectorAll('input[name="e_apply_send_to"]');
+                sendToRadios.forEach(radio => radio.checked = false);
+            }
+        }
+        eApplyRadios.forEach(radio => radio.addEventListener('change', toggleEApplySendToOptions));
+        toggleEApplySendToOptions(); 
+
+    });
+</script>
+</body>
+</html>

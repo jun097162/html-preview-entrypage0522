@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>入社手続き入力フォーム - ステップ2/3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>従業員情報 (ステップ2/3)</h1>
+
+        <form action="#" method="post" id="onboardingFormPage2">
+            <!-- 最終学歴 -->
+            <fieldset class="form-section">
+                <legend><h2>最終学歴</h2></legend>
+                <div class="inline-fields">
+                    <div class="form-group">
+                        <label for="education_level">最終学歴</label>
+                        <select id="education_level" name="education_level">
+                            <option value="">選択してください</option>
+                            <option value="high_school">高等学校</option>
+                            <option value="vocational_school">専門学校</option>
+                            <option value="junior_college">短期大学</option>
+                            <option value="university">大学</option>
+                            <option value="graduate_school">大学院</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="school_name">学校名</label>
+                        <input type="text" id="school_name" name="school_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="graduation_status">卒業/中退</label>
+                        <select id="graduation_status" name="graduation_status">
+                            <option value="">選択してください</option>
+                            <option value="graduated">卒業</option>
+                            <option value="dropped_out">中退</option>
+                            <option value="expected_graduation">卒業見込み</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- 主な職歴 -->
+            <fieldset class="form-section">
+                <legend><h2>主な職歴</h2></legend>
+                <div id="work_history_container">
+                    <div class="work_history_entry">
+                        <div class="work-history-header">
+                             <h3>職歴 (1)</h3>
+                             <!-- No delete button for the first entry by default -->
+                        </div>
+                        <div class="inline-fields">
+                            <div class="form-group">
+                                <label for="industry_1">業種</label>
+                                <select id="industry_1" name="industry_1">
+                                    <option value="">選択してください</option>
+                                    <option value="it">IT・通信</option>
+                                    <option value="manufacturing">製造</option>
+                                    <option value="finance">金融</option>
+                                    <option value="retail">小売</option>
+                                    <option value="service">サービス</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="company_name_1">会社名</label>
+                                <input type="text" id="company_name_1" name="company_name_1">
+                            </div>
+                        </div>
+                        <div class="inline-fields">
+                            <div class="form-group">
+                                <label for="hire_date_1">入社年月日</label>
+                                <input type="date" id="hire_date_1" name="hire_date_1">
+                            </div>
+                            <div class="form-group">
+                                <label for="resignation_date_1">退社年月日</label>
+                                <input type="date" id="resignation_date_1" name="resignation_date_1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="job_description_1">業務内容</label>
+                            <textarea id="job_description_1" name="job_description_1"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="add_work_history_btn" class="action-button-style" style="margin-top: 10px; background-color: #17a2b8;">職歴を追加</button>
+            </fieldset>
+            
+            <!-- 取得済みの資格 -->
+            <fieldset class="form-section">
+                <legend><h2>取得済みの資格</h2></legend>
+                <div class="checkbox-list" id="qualifications_list">
+                    <!-- data-attachment-text はアップロード時のラベル名に使用。無い場合は資格の表示名を使用 -->
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="drivers_license" data-attachment-text="普通運転免許のコピー"> 普通運転免許</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="chef" data-attachment-text="調理師免許のコピー"> 調理師</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="nutritionist" data-attachment-text="栄養士免許のコピー"> 栄養士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="registered_dietitian" data-attachment-text="管理栄養士免許のコピー"> 管理栄養士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="nurse" data-attachment-text="看護師免許のコピー"> 看護師</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="judicial_scrivener" data-attachment-text="司法書士資格のコピー"> 司法書士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="bookkeeping_nissho" data-attachment-text="簿記検定(日商簿記)合格証のコピー"> 簿記検定(日商簿記)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="fe_exam" data-attachment-text="基本情報技術者試験合格証のコピー"> 基本情報技術者試験(FE)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="certified_care_worker" data-attachment-text="介護福祉士登録証のコピー"> 介護福祉士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="patent_attorney" data-attachment-text="弁理士登録証のコピー"> 弁理士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="sme_consultant" data-attachment-text="中小企業診断士登録証のコピー"> 中小企業診断士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="ap_exam" data-attachment-text="応用情報技術者試験合格証のコピー"> 応用情報技術者試験(AP)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="social_worker" data-attachment-text="社会福祉士登録証のコピー"> 社会福祉士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="customs_broker" data-attachment-text="通関士資格のコピー"> 通関士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="administrative_scrivener" data-attachment-text="行政書士登録証のコピー"> 行政書士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="rISSep" data-attachment-text="情報処理安全確保支援士登録証のコピー"> 情報処理安全確保支援士(登録セキスペ)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="physical_therapist" data-attachment-text="理学療法士免許のコピー"> 理学療法士(PT)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="sharoushi" data-attachment-text="社会保険労務士資格のコピー"> 社会保険労務士(社労士)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="denken3" data-attachment-text="電気主任技術者(電験三種)免状のコピー"> 電気主任技術者(電験三種)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="pharmacist" data-attachment-text="薬剤師免許のコピー"> 薬剤師</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="tax_accountant" data-attachment-text="税理士資格のコピー"> 税理士</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="takken" data-attachment-text="宅地建物取引士証のコピー"> 宅地建物取引士(宅建)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="hazardous_materials_b4" data-attachment-text="危険物取扱者(乙種4類)免状のコピー"> 危険物取扱者(乙種4類)</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="clinical_lab_tech" data-attachment-text="臨床検査技師免許のコピー"> 臨床検査技師</label></div>
+                    <div class="checkbox-group"><label><input type="checkbox" name="qualifications[]" value="cpa" data-attachment-text="公認会計士登録証のコピー"> 公認会計士(CPA)</label></div>
+                </div>
+                <p class="description">取得済みの資格にチェックを入れ、証明画像をアップロードしてください。</p>
+                <div id="qualification_uploads_container" style="margin-top:10px;">
+                    <!-- JSでここに資格のアップロード項目を追加 -->
+                </div>
+            </fieldset>
+
+            <!-- 提出書類 -->
+            <fieldset class="form-section">
+                <legend><h2>提出書類</h2></legend>
+                <div class="inline-fields" id="submitted_documents_container">
+                    <div class="document-box" data-doc-id="employment_insurance_cert">
+                        <input type="file" id="employment_insurance_cert_file" name="employment_insurance_cert_file" style="display:none;" accept="image/*,.pdf">
+                        <p><strong>雇用保険被保険者証</strong></p>
+                        <p class="description">雇用保険被保険者証<br>過去に加入していた方のみ</p>
+                        <label for="employment_insurance_cert_file" class="upload-button-placeholder">アップロード</label>
+                        <div class="file-upload-status-container">
+                            <span class="file-status" id="employment_insurance_cert_file_status">選択されていません</span>
+                            <button type="button" class="delete-file-btn" data-target-id="employment_insurance_cert_file" style="display:none;">削除</button>
+                        </div>
+                    </div>
+                    <div class="document-box" data-doc-id="pension_book">
+                        <input type="file" id="pension_book_file" name="pension_book_file" style="display:none;" accept="image/*,.pdf">
+                        <p><strong>年金手帳</strong></p>
+                        <p class="description">年金手帳<br>20歳以上の方 社会保険加入者</p>
+                        <label for="pension_book_file" class="upload-button-placeholder">アップロード</label>
+                         <div class="file-upload-status-container">
+                            <span class="file-status" id="pension_book_file_status">選択されていません</span>
+                            <button type="button" class="delete-file-btn" data-target-id="pension_book_file" style="display:none;">削除</button>
+                        </div>
+                    </div>
+                    <div class="document-box" data-doc-id="resident_proof">
+                        <input type="file" id="resident_proof_file" name="resident_proof_file" style="display:none;" accept="image/*,.pdf">
+                        <p><strong>住民票記載事項証明書<br>もしくは住民票のコピー</strong></p>
+                        <p class="description">住民票の基準日が記載<br>もしくは日付表記なし<br>画像をアップロードしてください</p>
+                        <label for="resident_proof_file" class="upload-button-placeholder">アップロード</label>
+                        <div class="file-upload-status-container">
+                            <span class="file-status" id="resident_proof_file_status">選択されていません</span>
+                            <button type="button" class="delete-file-btn" data-target-id="resident_proof_file" style="display:none;">削除</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="navigation-buttons">
+                <a href="page1.html" class="action-button-style prev-btn">戻る (ステップ1へ)</a>
+                <a href="page3.html" class="action-button-style next-btn">次へ (ステップ3へ)</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- START: File Upload Logic (for "提出書類" and "資格") ---
+            function updateFileStatusDisplay(fileInput, statusElement, deleteButton, uploadLabelElement) {
+                if (fileInput.files && fileInput.files.length > 0) {
+                    statusElement.textContent = fileInput.files[0].name;
+                    if (deleteButton) deleteButton.style.display = 'inline-block';
+                    if (uploadLabelElement) uploadLabelElement.textContent = '変更';
+                    localStorage.setItem(fileInput.id + '_filename', fileInput.files[0].name);
+                } else {
+                    statusElement.textContent = statusElement.dataset.initialText || "選択されていません";
+                    if (deleteButton) deleteButton.style.display = 'none';
+                    if (uploadLabelElement) uploadLabelElement.textContent = uploadLabelElement.dataset.initialLabel || 'アップロード';
+                    localStorage.removeItem(fileInput.id + '_filename');
+                }
+            }
+            
+            // For "提出書類" section specifically
+            document.querySelectorAll('#submitted_documents_container .document-box').forEach(docBox => {
+                const fileInput = docBox.querySelector('input[type="file"]');
+                const statusSpan = docBox.querySelector('.file-status');
+                const deleteBtn = docBox.querySelector('.delete-file-btn');
+                const uploadLabel = docBox.querySelector('.upload-button-placeholder');
+
+                if (fileInput && statusSpan && uploadLabel) {
+                    statusSpan.dataset.initialText = statusSpan.textContent; 
+                    uploadLabel.dataset.initialLabel = uploadLabel.textContent; 
+                    
+                    const storedFilename = localStorage.getItem(fileInput.id + '_filename');
+                    if (storedFilename) {
+                        statusSpan.textContent = storedFilename;
+                        if(deleteBtn) deleteBtn.style.display = 'inline-block';
+                        uploadLabel.textContent = '変更'; 
+                    }
+
+                    fileInput.addEventListener('change', function() {
+                        updateFileStatusDisplay(this, statusSpan, deleteBtn, uploadLabel);
+                    });
+
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', function() {
+                            const targetId = this.dataset.targetId;
+                            const targetInput = document.getElementById(targetId);
+                            if (targetInput) {
+                                targetInput.value = ''; 
+                                const changeEvent = new Event('change', { bubbles: true });
+                                targetInput.dispatchEvent(changeEvent); 
+                            }
+                        });
+                    }
+                }
+            });
+            // --- END: File Upload Logic for "提出書類" ---
+
+
+            // --- START: Work History Add/Delete Logic ---
+            const workHistoryContainer = document.getElementById('work_history_container');
+            const addWorkHistoryBtn = document.getElementById('add_work_history_btn');
+            let workHistoryCount = 1; 
+
+            if (addWorkHistoryBtn && workHistoryContainer) {
+                workHistoryCount = workHistoryContainer.querySelectorAll('.work_history_entry').length;
+
+                addWorkHistoryBtn.addEventListener('click', function() {
+                    workHistoryCount++;
+                    const newEntry = document.createElement('div');
+                    newEntry.classList.add('work_history_entry');
+                    newEntry.innerHTML = `
+                        <div class="work-history-header">
+                            <h3>職歴 (${workHistoryCount})</h3>
+                            <button type="button" class="delete-work-history-btn">削除</button>
+                        </div>
+                        <div class="inline-fields">
+                            <div class="form-group">
+                                <label for="industry_${workHistoryCount}">業種</label>
+                                <select id="industry_${workHistoryCount}" name="industry_${workHistoryCount}">
+                                    <option value="">選択してください</option>
+                                    <option value="it">IT・通信</option>
+                                    <option value="manufacturing">製造</option>
+                                    <option value="finance">金融</option>
+                                    <option value="retail">小売</option>
+                                    <option value="service">サービス</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="company_name_${workHistoryCount}">会社名</label>
+                                <input type="text" id="company_name_${workHistoryCount}" name="company_name_${workHistoryCount}">
+                            </div>
+                        </div>
+                        <div class="inline-fields">
+                            <div class="form-group">
+                                <label for="hire_date_${workHistoryCount}">入社年月日</label>
+                                <input type="date" id="hire_date_${workHistoryCount}" name="hire_date_${workHistoryCount}">
+                            </div>
+                            <div class="form-group">
+                                <label for="resignation_date_${workHistoryCount}">退社年月日</label>
+                                <input type="date" id="resignation_date_${workHistoryCount}" name="resignation_date_${workHistoryCount}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="job_description_${workHistoryCount}">業務内容</label>
+                            <textarea id="job_description_${workHistoryCount}" name="job_description_${workHistoryCount}"></textarea>
+                        </div>
+                    `;
+                    workHistoryContainer.appendChild(newEntry);
+
+                    newEntry.querySelector('.delete-work-history-btn').addEventListener('click', function() {
+                        newEntry.remove();
+                        const entries = workHistoryContainer.querySelectorAll('.work_history_entry');
+                        entries.forEach((entry, index) => {
+                             const header = entry.querySelector('.work-history-header h3');
+                             if (header) { header.textContent = `職歴 (${index + 1})`; }
+                        });
+                        workHistoryCount = entries.length; 
+                    });
+                });
+            }
+            // --- END: Work History Add/Delete Logic ---
+
+            // --- START: Qualifications Attachment Logic (MODIFIED) ---
+            const qualificationsList = document.getElementById('qualifications_list');
+            const qualificationUploadsContainer = document.getElementById('qualification_uploads_container');
+
+            if (qualificationsList && qualificationUploadsContainer) {
+                const checkboxes = qualificationsList.querySelectorAll('input[type="checkbox"]');
+
+                checkboxes.forEach(checkbox => {
+                    // The "[添付]" span is removed from HTML, or can be kept hidden.
+                    // We will dynamically add upload fields for *every* checked item.
+
+                    checkbox.addEventListener('change', function() {
+                        updateQualificationUploads();
+                    });
+                    // Initial check on load for pre-checked boxes
+                    if (checkbox.checked) { // No longer checking for data-attachment-text here for initial load
+                         addQualificationUploadField(checkbox);
+                    }
+                });
+
+                function updateQualificationUploads() {
+                    qualificationUploadsContainer.innerHTML = ''; // Clear existing
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) { // Generate upload field if checked, regardless of data-attachment-text
+                            addQualificationUploadField(cb);
+                        }
+                    });
+                }
+
+                function addQualificationUploadField(checkbox) {
+                    const qualValue = checkbox.value;
+                    // Use data-attachment-text if available, otherwise use the checkbox's label text
+                    const labelElement = checkbox.closest('.checkbox-group').querySelector('label');
+                    const qualName = checkbox.dataset.attachmentText || (labelElement ? labelElement.textContent.trim() + "のコピー" : `資格 (${qualValue}) のコピー`);
+                    const fileInputId = `qualification_file_${qualValue}`;
+
+                    const formGroup = document.createElement('div');
+                    formGroup.className = 'form-group';
+
+                    const label = document.createElement('label');
+                    label.htmlFor = fileInputId;
+                    label.textContent = qualName + ":";
+                    formGroup.appendChild(label);
+                    
+                    const fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.id = fileInputId;
+                    fileInput.name = fileInputId; 
+                    fileInput.accept = "image/*,.pdf";
+                    fileInput.style.display = 'none'; 
+                    formGroup.appendChild(fileInput);
+
+                    const uploadLabel = document.createElement('label');
+                    uploadLabel.htmlFor = fileInputId;
+                    uploadLabel.className = 'upload-button-placeholder';
+                    uploadLabel.textContent = 'アップロード';
+                    uploadLabel.dataset.initialLabel = 'アップロード';
+                    formGroup.appendChild(uploadLabel);
+                    
+                    const statusContainer = document.createElement('div');
+                    statusContainer.className = 'file-upload-status-container';
+                    statusContainer.style.justifyContent = 'flex-start'; 
+                    statusContainer.style.marginTop = '0';
+
+
+                    const statusSpan = document.createElement('span');
+                    statusSpan.className = 'file-status';
+                    statusSpan.id = `${fileInputId}_status`;
+                    statusSpan.textContent = '選択されていません';
+                    statusSpan.dataset.initialText = '選択されていません';
+                    statusSpan.style.marginLeft = '10px';
+                    statusContainer.appendChild(statusSpan);
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.type = 'button';
+                    deleteBtn.className = 'delete-file-btn';
+                    deleteBtn.textContent = '削除';
+                    deleteBtn.dataset.targetId = fileInputId;
+                    deleteBtn.style.display = 'none';
+                    deleteBtn.style.marginLeft = '10px';
+                    statusContainer.appendChild(deleteBtn);
+                    
+                    formGroup.appendChild(statusContainer);
+                    qualificationUploadsContainer.appendChild(formGroup);
+
+                    // Load from localStorage
+                    const storedFilename = localStorage.getItem(fileInput.id + '_filename');
+                    if (storedFilename) {
+                        statusSpan.textContent = storedFilename;
+                        deleteBtn.style.display = 'inline-block';
+                        uploadLabel.textContent = '変更';
+                    }
+
+                    fileInput.addEventListener('change', function() {
+                        updateFileStatusDisplay(this, statusSpan, deleteBtn, uploadLabel);
+                    });
+                    deleteBtn.addEventListener('click', function() {
+                        fileInput.value = '';
+                        updateFileStatusDisplay(fileInput, statusSpan, deleteBtn, uploadLabel);
+                    });
+                }
+                updateQualificationUploads(); // Initial call
+            }
+            // --- END: Qualifications Attachment Logic ---
+        });
+    </script>
+</body>
+</html>

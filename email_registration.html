@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知用メールアドレスの登録</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 560px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #1c1e21;
+            margin-bottom: 25px;
+        }
+       .form-section { /* Reusing class from previous page for consistency */
+            background-color: #ffffff; /* Image shows white background for this section */
+            border: 1px solid #e9ecef;
+            padding: 25px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .form-group input::placeholder {
+            color: #90949c;
+            opacity: 1;
+        }
+        .form-group input.input-error {
+            border-color: #e74c3c;
+            background-color: #fee;
+        }
+        .form-group input.input-error::placeholder {
+            color: #e74c3c;
+            opacity: 0.8;
+        }
+        .helper-text { /* For the description under the label */
+            font-size: 14px; /* Slightly larger for this description */
+            color: #333;
+            margin-bottom: 10px; /* Space before input field */
+            line-height: 1.6;
+        }
+        .optional-label {
+            background-color: #6c757d; /* グレー */
+            color: white;
+            padding: 3px 7px;
+            font-size: 11px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: normal;
+            vertical-align: middle;
+        }
+        .action-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+        .skip-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .skip-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>通知用メールアドレスの登録</h1>
+
+        <div class="form-section">
+            <form id="email-registration-form">
+                <div class="form-group">
+                    <label for="notification-email">メールアドレス<span class="optional-label">任意</span></label>
+                    <p class="helper-text">会社からの依頼の受信や、パスワードの再発行に利用するメールアドレスを登録してください。</p>
+                    <input type="email" id="notification-email" name="notification-email" placeholder="例: your.email@example.com">
+                </div>
+            </form>
+        </div>
+        
+        <button type="submit" form="email-registration-form" class="action-button">登録</button>
+        <a href="#" id="skip-registration" class="skip-link">あとで登録 →</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('email-registration-form');
+            const emailInput = document.getElementById('notification-email');
+            const skipLink = document.getElementById('skip-registration');
+
+            const errorPlaceholderText = 'このフィールドを入力してください。';
+            const invalidEmailErrorText = '有効なメールアドレスを入力してください。';
+
+            function setInputError(inputElement, errorMessage) {
+                inputElement.classList.add('input-error');
+                if (!inputElement.dataset.originalPlaceholder) {
+                    inputElement.dataset.originalPlaceholder = inputElement.placeholder;
+                }
+                inputElement.placeholder = errorMessage;
+            }
+
+            function clearInputError(inputElement) {
+                inputElement.classList.remove('input-error');
+                inputElement.placeholder = inputElement.dataset.originalPlaceholder || '例: your.email@example.com';
+            }
+
+            function isValidEmail(email) {
+                // Basic email validation regex
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                let isValid = true;
+                clearInputError(emailInput);
+
+                const emailValue = emailInput.value.trim();
+
+                if (emailValue === '') {
+                    // Email is optional, so submitting an empty field is not an error here.
+                    // It means they chose to register without providing an email at this step.
+                    // However, if the design implies a "Register" button means an attempt to register *something*,
+                    // this logic might change. For now, an empty field + "Register" means proceed without email.
+                    alert('メールアドレスは登録されませんでした。\n（処理を続行します）');
+                    // Proceed to next step or dashboard
+                    // window.location.href = 'dashboard.html'; 
+                } else if (!isValidEmail(emailValue)) {
+                    setInputError(emailInput, invalidEmailErrorText);
+                    isValid = false;
+                }
+
+                if (isValid && emailValue !== '') {
+                    alert('メールアドレス「' + emailValue + '」を登録しました。\n（実際には保存されません）');
+                    // Proceed to next step or dashboard
+                    // window.location.href = 'dashboard.html';
+                } else if (isValid && emailValue === '') {
+                    // Handled above.
+                }
+            });
+
+            skipLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                alert('メールアドレスの登録をスキップしました。\n（処理を続行します）');
+                // Proceed to next step or dashboard
+                // window.location.href = 'dashboard.html';
+            });
+            
+            if (!emailInput.dataset.originalPlaceholder) {
+                emailInput.dataset.originalPlaceholder = emailInput.placeholder;
+            }
+
+            emailInput.addEventListener('input', function() {
+                if (this.classList.contains('input-error')) {
+                    clearInputError(this);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>入社手続き入力フォーム - ステップ3/3</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* dependent-declaration-form.html から持ってきたスタイルを一部調整・追加 */
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-add { background-color: #28a745; color: white; display: inline-block; text-decoration: none; padding: 8px 12px; border-radius: 4px;}
+        .hidden { display: none; }
+        .required-mark::after { content: " 必須"; color: red; font-size: 0.9em; }
+        /* .note は style.css にあるので重複を避けるか、こちらで詳細化 */
+        .dependent-entry { 
+            border: 1px solid #e0e0e0; 
+            padding: 15px; 
+            margin-bottom: 15px;
+            border-radius: 4px; 
+            background-color: #fdfdfd;
+        }
+        .dependent-entry:first-child { margin-top: 0; } /* 最初の要素の上マージンは不要な場合 */
+        .delete-dependent-btn { 
+            background-color: #dc3545; color: white; border: none; padding: 5px 10px;
+            border-radius: 4px; font-size: 0.85em; cursor: pointer; float: right;
+        }
+        .income-input { display: flex; align-items: center; }
+        .income-input input[type="number"] { flex-grow: 1; margin-right: 5px; }
+        .income-input span { white-space: nowrap; }
+        .dependent-title { margin-top:0; border-bottom: none;} /* テンプレート内のh3スタイル調整 */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>従業員情報 (ステップ3/3)</h1>
+
+        <form action="#" method="post" id="onboardingFormPage3">
+            <!-- 扶養親族（税法上の扶養家族） -->
+            <fieldset class="form-section">
+                <legend><h2>扶養親族（税法上の扶養家族）</h2></legend>
+                
+                <div class="section" id="initial-question-section">
+                    <h3>あなたが扶養する家族（税法上の扶養家族）はいますか？<br>16歳未満の扶養家族も対象です</h3>
+                    <p class="description">ここでは配偶者以外の家族について確認しています。<br>
+                       今年、扶養する家族がいる場合は、定額減税の対象になります。</p>
+                    <p class="description">今年、退職手当を受け取ったことで扶養から外れた家族がいる場合は、「はい」を選択してください。
+                       詳しくは、「<a href="#" target="_blank" class="modal-trigger-link">退職手当を受け取った配偶者・扶養親族がいる場合の対応</a>」を参照してください。
+                    </p>
+                    <div class="button-group" style="margin-top:15px;">
+                        <button type="button" id="btn-has-dependents" class="action-button-style btn-primary">はい</button>
+                        <button type="button" id="btn-no-dependents" class="action-button-style btn-secondary">いいえ</button>
+                    </div>
+                </div>
+
+                <div id="dependent-form-main" class="hidden">
+                    <div class="section" style="border:none; padding-left:0; padding-right:0;">
+                        <p class="note">■ 家族の情報元に削除する とき、年調家族が未設定または年調未計算で家族の扶養区分が未判定の場合、扶養家族は削除できません。</p>
+                        <p class="note">■ 16歳未満の家族も入力が必要です。生年月日をもとに年少扶養親族かどうかを判定します。</p>
+                        <p class="note">■ 今年の途中で死亡した家族がいる場合<br>
+                            今年（2024年）に死亡した扶養家族がいる場合は、［扶養対象］で「今年（2024年）の税法上の扶養対象とする」を選択してください。死亡した家族の所得要件等を満たしていれば、年末時点に扶養家族がいなくても扶養の対象になります。</p>
+                        <p class="note">■ 海外に居住する家族がいる場合<br>
+                            海外に居住する扶養家族がいる場合は、［同居・別居の別］で［海外に在住］を選択します。送金がある場合は［今年の送金額］・［来年の送金予定額］を入力してください。</p>
+                    </div>
+
+                    <div id="dependents-container" style="margin-top: 20px;">
+                        <!-- Dependent entries will be added here by JavaScript -->
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <button type="button" id="add-dependent-btn" class="btn-add action-button-style">+ 別の扶養家族（配偶者以外）の情報を追加する</button>
+                    </div>
+                </div>
+
+                <div id="no-dependents-message" class="section hidden" style="margin-top: 20px;">
+                    <p>扶養する家族がいない場合の手続きはここまでです。</p>
+                    <div style="margin-top: 15px;">
+                        <button type="button" id="btn-back-to-initial-question" class="action-button-style btn-secondary">最初の質問に戻る</button>
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <div class="navigation-buttons">
+                <a href="page2.html" class="action-button-style prev-btn">戻る (ステップ2へ)</a>
+                <button type="submit" class="action-button-style submit-btn">登録する</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Template for a dependent entry -->
+    <template id="dependent-template">
+        <div class="dependent-entry">
+            <button type="button" class="delete-dependent-btn">この家族情報を削除</button>
+            <h3 class="dependent-title">扶養家族（配偶者以外）の情報</h3>
+            <div class="form-group">
+                <label class="required-mark">扶養対象</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="fuyo_taisho" value="this_year_target" checked> 今年（2024年）の税法上の扶養対象とする</label><br>
+                    <label><input type="radio" name="fuyo_taisho" value="this_year_not_target"> 今年（2024年）の税法上の扶養対象としない</label><br>
+                    <label><input type="radio" name="fuyo_taisho" value="not_fuyo"> 扶養しない</label>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="nencho_removed"> この情報で年末調整手当を受け取ったところで扶養から外れた場合</label>
+                </div>
+                <div class="nencho-removed-details hidden" style="padding-left: 20px;">
+                    <p class="note">退職手当などがあれば会計年度内の所得で扶養判定するため、扶養から外れる場合があります。<br>
+                    扶養から外れた場合は、対象者のチェックボックスにチェックを入れてください。<br>
+                    詳しくは<a href="#" class="modal-trigger-link">退職手当を受け取った配偶者・扶養親族がいる場合の対応</a>を参照してください。
+                    </p>
+                </div>
+            </div>
+    
+            <div class="inline-fields">
+                <div class="form-group">
+                    <label for="sei" class="required-mark">姓</label>
+                    <input type="text" name="sei" placeholder="例：山田">
+                </div>
+                <div class="form-group">
+                    <label for="mei" class="required-mark">名</label>
+                    <input type="text" name="mei" placeholder="例：太郎">
+                </div>
+            </div>
+            <div class="inline-fields">
+                <div class="form-group">
+                    <label for="sei_kana" class="required-mark">姓（ヨミガナ）</label>
+                    <input type="text" name="sei_kana" placeholder="例：ヤマダ">
+                </div>
+                <div class="form-group">
+                    <label for="mei_kana" class="required-mark">名（ヨミガナ）</label>
+                    <input type="text" name="mei_kana" placeholder="例：タロウ">
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="zokugara" class="required-mark">続柄</label>
+                <select name="zokugara">
+                    <option value="">選択してください</option>
+                    <option value="ko">子</option>
+                    <option value="fubo">父母</option>
+                    <option value="gf_gm">祖父母</option>
+                    <option value="kyodai_shimai">兄弟姉妹</option>
+                    <option value="other">その他</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                   <label><input type="checkbox" name="is_child_check"> 子供の場合はチェックを入れてください</label>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="birth_date" class="required-mark">生年月日</label>
+                <input type="date" name="birth_date">
+                <p class="note">平成22年11月11日 → 2010/11/11</p>
+            </div>
+    
+            <div class="form-group">
+                <label for="fuyo_start_date">税法上の扶養になった日</label>
+                <input type="date" name="fuyo_start_date">
+                <p class="note">年の途中で扶養対象になる場合のみ日付を入力します。</p>
+            </div>
+    
+            <div class="form-group fuyo_end_reason_group hidden">
+                <label for="fuyo_end_reason">税法上の扶養に該当しなくなった理由</label>
+                <select name="fuyo_end_reason">
+                    <option value="">選択してください</option>
+                    <option value="death">死亡</option>
+                    <option value="employment">就職</option>
+                    <option value="separation">別居</option>
+                    <option value="other">その他</option>
+                </select>
+                 <p class="note">今年税法上の扶養で追加して途中で該当しなくなった場合のみ理由を入力します。</p>
+            </div>
+    
+            <!-- 所得見積セクション -->
+            <div class="income-section">
+                <h4>今年の所得見積</h4>
+                <div class="form-group">
+                    <label>給与収入額</label>
+                    <div class="income-input"><input type="number" name="income_salary_revenue_this_year" placeholder="0" min="0"><span>円</span></div>
+                     <p class="note">収入がなければ0を入力してください。交通費などの非課税手当など年調収入額を登録してください。<br>
+                    複数箇所から給与がある場合は合計額を登録します。年末調整は1箇所のみで可能です。</p>
+                </div>
+                <div class="form-group">
+                    <label>所得見積額</label>
+                    <div class="income-input"><input type="number" name="income_salary_estimate_this_year" placeholder="0" min="0"><span>円</span></div>
+                    <p class="note">所得控除額は103万円です。</p>
+                </div>
+                <div class="form-group hidden"> <!-- 所得控除額は自動計算のため非表示にすることも検討 -->
+                    <label>所得控除額</label>
+                    <div class="income-input"><input type="number" name="income_salary_deduction_this_year" placeholder="0" min="0" readonly class="readonly-field"><span>円</span></div>
+                </div>
+               
+                <div class="form-group">
+                    <label>年金収入額</label>
+                    <div class="income-input"><input type="number" name="income_pension_revenue_this_year" placeholder="0" min="0"><span>円</span></div>
+                </div>
+                 <div class="form-group">
+                    <label>所得見積額</label>
+                    <div class="income-input"><input type="number" name="income_pension_estimate_this_year" placeholder="0" min="0"><span>円</span></div>
+                     <p class="note">収入がなければ0を入力してください。65歳未満は108万まで、65歳以上は158万まで。</p>
+                </div>
+                <div class="form-group hidden">
+                    <label>所得控除額</label>
+                    <div class="income-input"><input type="number" name="income_pension_deduction_this_year" placeholder="0" min="0" readonly class="readonly-field"><span>円</span></div>
+                </div>
+    
+                <div class="form-group">
+                    <label>退職所得</label>
+                    <div class="income-input"><input type="number" name="income_retirement_revenue_this_year" placeholder="0" min="0"><span>円</span></div>
+                </div>
+                 <div class="form-group">
+                    <label>所得見積額</label>
+                    <div class="income-input"><input type="number" name="income_retirement_estimate_this_year" placeholder="0" min="0"><span>円</span></div>
+                </div>
+                <div class="form-group hidden">
+                    <label>所得控除額</label>
+                    <div class="income-input"><input type="number" name="income_retirement_deduction_this_year" placeholder="0" min="0" readonly class="readonly-field"><span>円</span></div>
+                </div>
+    
+                <div class="form-group">
+                    <label>その他所得</label>
+                    <div class="income-input"><input type="number" name="income_other_revenue_this_year" placeholder="0" min="0"><span>円</span></div>
+                </div>
+                 <div class="form-group">
+                    <label>所得見積額</label>
+                    <div class="income-input"><input type="number" name="income_other_estimate_this_year" placeholder="0" min="0"><span>円</span></div>
+                    <p class="note">収入がなければ0を入力してください。事業所得は、経費を引いたあとの所得額を入力してください。<br>
+                    一時所得、譲渡所得は特別控除を引いたあとの所得額です。</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>所得見積合計額</label>
+                    <div class="income-input"><input type="number" name="income_total_estimate_this_year" placeholder="0" min="0" readonly class="readonly-field"><span>円</span></div>
+                    <p class="note">合計の見積額は年間48万円までが対象です。</p>
+                </div>
+    
+                <div class="form-group">
+                    <label for="disability_category_this_year" class="required-mark">今年の障害者区分</label>
+                    <select name="disability_category_this_year">
+                        <option value="not_applicable">該当しない</option>
+                        <option value="general">一般の障害者</option>
+                        <option value="special">特別障害者</option>
+                        <option value="doukyo_special">同居特別障害者</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="income-section">
+                <h4>来年の所得見積</h4>
+                <div class="form-group">
+                    <label>給与収入額</label>
+                    <div class="income-input"><input type="number" name="income_salary_revenue_next_year" placeholder="0" min="0"><span>円</span></div>
+                </div>
+                <div class="form-group">
+                    <label>所得見積額</label>
+                    <div class="income-input"><input type="number" name="income_salary_estimate_next_year" placeholder="0" min="0"><span>円</span></div>
+                    <p class="note">所得控除額は103万円です。</p>
+                </div>
+                 <div class="form-group">
+                    <label>年金収入額</label>
+                    <div class="income-input"><input type="number" name="income_pension_revenue_next_year" placeholder="0" min="0"><span>円</span></div>
+                </div>
+                 <div class="form-group">
+                    <label>所得見積額</label>
+                    <div class="income-input"><input type="number" name="income_pension_estimate_next_year" placeholder="0" min="0"><span>円</span></div>
+                     <p class="note">収入がなければ0を入力してください。65歳未満は108万まで、65歳以上は158万まで。</p>
+                </div>
+                 <div class="form-group">
+                    <label>その他所得</label>
+                    <div class="income-input"><input type="number" name="income_other_revenue_next_year" placeholder="0" min="0"><span>円</span></div>
+                </div>
+                 <div class="form-group">
+                    <label>所得見積額</label>
+                    <div class="income-input"><input type="number" name="income_other_estimate_next_year" placeholder="0" min="0"><span>円</span></div>
+                    <p class="note">収入がなければ0を入力してください。事業所得は、経費を引いたあとの所得額を入力してください。<br>
+                    一時所得、譲渡所得は特別控除を引いたあとの所得額です。</p>
+                </div>
+                <div class="form-group">
+                    <label>所得見積合計額</label>
+                    <div class="income-input"><input type="number" name="income_total_estimate_next_year" placeholder="0" min="0" readonly class="readonly-field"><span>円</span></div>
+                    <p class="note">合計の見積額は年間48万円までが対象です。</p>
+                </div>
+                <div class="form-group">
+                    <label for="disability_category_next_year">来年の障害者区分</label>
+                    <select name="disability_category_next_year">
+                        <option value="not_applicable">該当しない</option>
+                        <option value="general">一般の障害者</option>
+                        <option value="special">特別障害者</option>
+                        <option value="doukyo_special">同居特別障害者</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const initialQuestionSection = document.getElementById('initial-question-section');
+            const dependentFormMain = document.getElementById('dependent-form-main');
+            const noDependentsMessage = document.getElementById('no-dependents-message');
+            const btnHasDependents = document.getElementById('btn-has-dependents');
+            const btnNoDependents = document.getElementById('btn-no-dependents');
+            const addDependentBtn = document.getElementById('add-dependent-btn');
+            const dependentsContainer = document.getElementById('dependents-container');
+            const dependentTemplate = document.getElementById('dependent-template');
+            const btnBackToInitialQuestion = document.getElementById('btn-back-to-initial-question'); // New button
+            let dependentIndexCounter = 0; 
+
+            btnHasDependents.addEventListener('click', function() {
+                initialQuestionSection.classList.add('hidden');
+                dependentFormMain.classList.remove('hidden');
+                noDependentsMessage.classList.add('hidden');
+                if (dependentsContainer.children.length === 0) { 
+                    addDependentEntry();
+                }
+            });
+
+            btnNoDependents.addEventListener('click', function() {
+                initialQuestionSection.classList.add('hidden');
+                dependentFormMain.classList.add('hidden');
+                noDependentsMessage.classList.remove('hidden');
+                dependentsContainer.innerHTML = ''; 
+                dependentIndexCounter = 0; 
+            });
+
+            if (btnBackToInitialQuestion) { // Event listener for the new back button
+                btnBackToInitialQuestion.addEventListener('click', function() {
+                    noDependentsMessage.classList.add('hidden');
+                    initialQuestionSection.classList.remove('hidden');
+                    // dependentFormMain remains hidden, dependentsContainer is already empty or will be if "はい" is chosen next
+                });
+            }
+
+            addDependentBtn.addEventListener('click', addDependentEntry);
+
+            function addDependentEntry() {
+                dependentIndexCounter++;
+                const templateContent = dependentTemplate.content.cloneNode(true);
+                const newEntry = templateContent.querySelector('.dependent-entry');
+                newEntry.dataset.dependentIndex = dependentIndexCounter;
+
+                newEntry.querySelectorAll('[name]').forEach(el => {
+                    const originalName = el.getAttribute('name');
+                    el.name = `${originalName}_${dependentIndexCounter}`;
+                    if (el.id) {
+                        el.id = `${el.id}_${dependentIndexCounter}`;
+                    }
+                });
+                newEntry.querySelectorAll('label[for]').forEach(label => {
+                    const originalFor = label.getAttribute('for');
+                    label.htmlFor = `${originalFor}_${dependentIndexCounter}`;
+                });
+                newEntry.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    const originalName = radio.getAttribute('name').replace(/_\d+$/, ''); 
+                    radio.name = `${originalName}_${dependentIndexCounter}`;
+                });
+
+                const title = newEntry.querySelector('.dependent-title');
+                title.textContent = `扶養家族（配偶者以外）の情報 ${dependentsContainer.children.length + 1}`;
+
+                setupConditionalLogicAndIncomeCalc(newEntry, dependentIndexCounter);
+                
+                dependentsContainer.appendChild(newEntry);
+            }
+
+            function setupConditionalLogicAndIncomeCalc(entryElement, entryIndex) {
+                const nenchoCheckbox = entryElement.querySelector(`input[name^="nencho_removed_"]`); 
+                const nenchoDetails = entryElement.querySelector('.nencho-removed-details');
+                if (nenchoCheckbox && nenchoDetails) {
+                    nenchoCheckbox.addEventListener('change', function() {
+                        nenchoDetails.classList.toggle('hidden', !this.checked);
+                    });
+                }
+
+                const fuyoTaishoRadios = entryElement.querySelectorAll(`input[name^="fuyo_taisho_"]`);
+                const fuyoEndReasonGroup = entryElement.querySelector('.fuyo_end_reason_group');
+                if (fuyoTaishoRadios.length > 0 && fuyoEndReasonGroup) {
+                    fuyoTaishoRadios.forEach(radio => {
+                        radio.addEventListener('change', function() {
+                            const selectedValue = entryElement.querySelector(`input[name="${this.name}"]:checked`).value;
+                            fuyoEndReasonGroup.classList.toggle('hidden', selectedValue !== 'this_year_not_target');
+                        });
+                    });
+                    const initialSelectedFuyo = entryElement.querySelector(`input[name^="fuyo_taisho_"]:checked`);
+                    if (initialSelectedFuyo) {
+                         fuyoEndReasonGroup.classList.toggle('hidden', initialSelectedFuyo.value !== 'this_year_not_target');
+                    }
+                }
+
+                const deleteBtn = entryElement.querySelector('.delete-dependent-btn');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', function() {
+                        entryElement.remove();
+                        const allEntries = dependentsContainer.querySelectorAll('.dependent-entry');
+                        allEntries.forEach((entry, i) => {
+                            const title = entry.querySelector('.dependent-title');
+                            if (title) title.textContent = `扶養家族（配偶者以外）の情報 ${i + 1}`;
+                        });
+                        
+                        if (dependentsContainer.children.length === 0) {
+                            initialQuestionSection.classList.remove('hidden');
+                            dependentFormMain.classList.add('hidden');
+                            noDependentsMessage.classList.add('hidden'); 
+                            dependentIndexCounter = 0; 
+                        }
+                    });
+                }
+                
+                function calculateTotalEstimate(yearType) { 
+                    let total = 0;
+                    const salaryEst = parseFloat(entryElement.querySelector(`input[name="income_salary_estimate_${yearType}_${entryIndex}"]`)?.value) || 0;
+                    const pensionEst = parseFloat(entryElement.querySelector(`input[name="income_pension_estimate_${yearType}_${entryIndex}"]`)?.value) || 0;
+                    const retirementEstInput = entryElement.querySelector(`input[name="income_retirement_estimate_${yearType}_${entryIndex}"]`);
+                    const retirementEst = retirementEstInput ? (parseFloat(retirementEstInput.value) || 0) : 0; 
+                    const otherEst = parseFloat(entryElement.querySelector(`input[name="income_other_estimate_${yearType}_${entryIndex}"]`)?.value) || 0;
+                    
+                    total = salaryEst + pensionEst + retirementEst + otherEst;
+                    
+                    const totalInput = entryElement.querySelector(`input[name="income_total_estimate_${yearType}_${entryIndex}"]`);
+                    if (totalInput) totalInput.value = total;
+                }
+
+                ['this_year', 'next_year'].forEach(year => {
+                    ['salary', 'pension', 'retirement', 'other'].forEach(type => {
+                        const estimateInputField = entryElement.querySelector(`input[name="income_${type}_estimate_${year}_${entryIndex}"]`);
+                        if (estimateInputField) {
+                            estimateInputField.addEventListener('input', () => calculateTotalEstimate(year));
+                        }
+                    });
+                    calculateTotalEstimate(year); 
+                });
+            }
+
+            const finalForm = document.getElementById('onboardingFormPage3');
+            if (finalForm) {
+                finalForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); 
+                    alert('「登録する」ボタンがクリックされました。\n実際のアプリケーションでは、ここで全ページのデータを収集・送信します。');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+h1, h2 {
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+h2 {
+    font-size: 1.2em;
+    margin-top: 30px;
+}
+h3 {
+    font-size: 1.1em;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #ccc;
+}
+h4 { /* Added for sub-sections like 利用交通機関詳細 */
+    font-size: 1.05em;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: #555;
+}
+.form-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.form-group {
+    margin-bottom: 15px;
+    position: relative; /* For suggestion box positioning */
+}
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.form-group input[type="file"] {
+    padding: 3px 8px;
+}
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+.inline-fields {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.inline-fields .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+.postal-code-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+.postal-code-group .form-group {
+    flex-grow: 1;
+}
+.postal-code-group button {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    height: 35px;
+    flex-shrink: 0;
+    margin-bottom: 15px;
+}
+.radio-group label,
+.checkbox-group label {
+    font-weight: normal;
+    margin-right: 15px;
+}
+.radio-group input[type="radio"],
+.checkbox-group input[type="checkbox"] {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.readonly-field {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+.required-field {
+    border: 1px solid red;
+    background-color: #fff0f0;
+}
+.description, .note, .file-status {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+}
+.annotation {
+     /* ... existing styles ... */
+}
+.document-box {
+    border: 1px dashed #ccc;
+    padding: 15px;
+    text-align: center;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+.document-box.clickable-document {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.document-box.clickable-document:hover {
+    background-color: #f0f0f0;
+}
+.document-box p {
+    margin: 5px 0;
+}
+.document-icon {
+    font-size: 2em;
+    color: #007bff;
+}
+.upload-button-placeholder, .action-button-style {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    border: none;
+    text-align: center;
+}
+.upload-button-placeholder:hover, .action-button-style:hover {
+    background-color: #0056b3;
+}
+.modal-trigger-link {
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.conditions {
+    border: 1px solid #007bff;
+    padding: 15px;
+    margin-top: 10px;
+    background-color: #e7f3ff;
+    border-radius: 4px;
+}
+.conditions ul {
+    padding-left: 20px;
+    margin: 0;
+}
+.conditions li {
+    margin-bottom: 5px;
+}
+.checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+.checkbox-list .checkbox-group {
+    display: flex;
+    align-items: center;
+}
+.checkbox-list .checkbox-group .upload-icon-placeholder {
+    margin-left: auto;
+    font-size: 0.8em;
+    color: #007bff;
+    cursor: pointer;
+}
+
+/* Suggestion Box Styles */
+.suggestion-box {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 100;
+    width: calc(100% - 2px);
+    max-height: 150px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    left: 0;
+    top: 100%;
+}
+.suggestion-box div {
+    padding: 8px;
+    cursor: pointer;
+}
+.suggestion-box div:hover {
+    background-color: #f0f0f0;
+}
+.file-upload-status-container {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center items if they wrap */
+    gap: 5px;
+}
+.delete-file-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 3px 7px;
+    font-size: 0.8em;
+    border-radius: 3px;
+    cursor: pointer;
+    line-height: 1; /* Ensure consistent height */
+}
+.delete-file-btn:hover {
+    background-color: #c82333;
+}
+
+
+/* Modal Styles (Shared) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    align-items: center; 
+    justify-content: center;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; 
+    padding: 25px; 
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px; 
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* General styles for modal header, applicable to all modals using this structure */
+.modal-header {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.4em; 
+    color: #333;
+    border-bottom: none;
+}
+
+/* General modal close button style */
+.modal .close-button { 
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1; 
+    padding: 0 5px; 
+}
+.modal .close-button:hover,
+.modal .close-button:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* Contract Agreement Modal Specific Styles */
+.contract-agreement-modal .modal-content { /* Specific overrides for contract modals */
+    padding: 25px 30px; 
+    max-width: 900px; 
+}
+.contract-agreement-modal .modal-body .form-group { margin-bottom: 20px; }
+.contract-agreement-modal .modal-body label { display: block; font-size: 14px; font-weight: bold; color: #333; margin-bottom: 8px; }
+.contract-agreement-modal .modal-body input[type="text"],
+.contract-agreement-modal .modal-body textarea { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+.contract-agreement-modal .modal-body textarea { min-height: 100px; resize: vertical; }
+.contract-agreement-modal .modal-body .required-label { background-color: #fd7e14; color: white; padding: 2px 6px; font-size: 10px; border-radius: 3px; margin-left: 5px; }
+.contract-agreement-modal .modal-footer { padding-top: 20px; border-top: 1px solid #e9ecef; margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
+.contract-agreement-modal .modal-footer .btn-secondary { background-color: #f8f9fa; color: #333; border: 1px solid #ced4da; }
+.contract-agreement-modal .error-message { display: block; color: #dc3545; font-size: 12px; margin-top: 4px; }
+.contract-agreement-modal .input-error { border-color: #dc3545 !important; }
+.contract-agreement-modal .agree-modal-body .checkbox-group { margin-bottom: 15px; display: flex; align-items: center; }
+.contract-agreement-modal .agree-modal-body input[type="checkbox"] { margin-right: 10px; transform: scale(1.1); }
+
+.contract-viewer {
+    border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-bottom: 15px;
+    background-color: #fff; overflow-x: auto; max-height: 400px; overflow-y: auto;
+}
+.contract-viewer img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.action-prompt {  text-align: center; font-size: 14px; color: #555; margin-bottom: 15px; }
+.button-group {  display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
+.action-btn {
+    padding: 10px 25px; font-size: 15px; border: none; border-radius: 5px;
+    cursor: pointer; font-weight: bold; transition: background-color 0.3s, box-shadow 0.3s;
+}
+.agree-btn { background-color: #007bff; color: white; }
+.reject-btn { background-color: #f8f9fa; color: #dc3545; border: 1px solid #dc3545; }
+.reject-btn.submit { background-color: #dc3545; color: white; }
+
+.post-agreement-actions-modal {
+    display: none; flex-direction: column; align-items: center; gap: 10px; margin-top: 15px;
+}
+.action-buttons-row-inner { display: flex; justify-content: center; gap: 10px; }
+.action-btn-small {
+    padding: 8px 15px; font-size: 14px; border: 1px solid #ccc; background-color: #fff;
+    color: #333; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.action-btn-small svg { width: 1em; height: 1em; fill: currentColor; }
+.post-agreement-actions-modal .checkbox-option { display: flex; align-items: center; font-size: 14px; }
+.post-agreement-actions-modal .checkbox-option input[type="checkbox"] { margin-right: 5px; }
+.document-box-post-actions { margin-top: 10px; display: flex; justify-content: center; gap: 10px; }
+.image-preview-container { display: flex; align-items: flex-start; gap: 20px; }
+.image-preview-container .form-group { flex: 1; }
+.image-preview-box {
+    width: 200px; height: 150px; border: 2px dashed #ccc; display: flex;
+    justify-content: center; align-items: center; text-align: center;
+    color: #777; background-color: #f9f9f9; overflow: hidden;
+}
+.image-preview-box img { max-width: 100%; max-height: 100%; display: block; }
+.commute-method-specific-section {
+    border: 1px solid #e0e0e0; padding: 15px; margin-top: 15px;
+    border-radius: 4px; background-color: #fdfdfd;
+}
+.contract-status { font-weight: bold; }
+.status-agreed { color: green; }
+.status-pending { color: orange; }
+.status-rejected { color: red; }
+
+.work-history-entry {
+    border: 1px solid #e0e0e0; padding: 15px; margin-bottom: 15px;
+    border-radius: 4px; background-color: #fdfdfd;
+}
+.work-history-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+}
+.work-history-header h3 { margin-top: 0; margin-bottom: 0; border-bottom: none; }
+.delete-work-history-btn {
+    background-color: #dc3545; color: white; border: none; padding: 5px 10px;
+    border-radius: 4px; font-size: 0.85em; cursor: pointer;
+}
+.delete-work-history-btn:hover { background-color: #c82333; }
+
+.debug-controls {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.debug-controls button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 0 5px;
+}
+.debug-controls button:hover {
+    background-color: #5a6268;
+}
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.navigation-buttons .action-button-style {
+    padding: 10px 20px;
+    font-size: 1.1em;
+}
+.navigation-buttons .next-btn {
+    background-color: #007bff;
+}
+.navigation-buttons .prev-btn {
+    background-color: #6c757d;
+}
+.navigation-buttons .submit-btn {
+    background-color: #28a745;
+}

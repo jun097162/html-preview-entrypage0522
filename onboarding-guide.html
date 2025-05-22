@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEOC P-web ご利用案内</title>
+    <style>
+        :root {
+            --base-font-size: 16px; /* 基準フォントサイズ */
+            --text-color: #333;
+            --link-color: #007bff;
+            --accent-color: #f8a100; /* 初めての方へ の色 */
+            --secondary-color: #4caf50; /* LEOC P-web の緑 */
+            --border-color: #ccc;
+            --background-color: #f9f9f9;
+            --header-bg-color: #e9e9e9;
+            --toc-bg-color: #f0f8ff; /* 目次の背景色 */
+        }
+
+        html {
+             scroll-behavior: smooth; /* スムーズスクロールを有効にする */
+        }
+
+        body {
+            font-family: sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            font-size: var(--base-font-size); /* 基準フォントサイズを適用 */
+            -webkit-text-size-adjust: 100%; /* iOSでのフォントサイズ自動調整を防ぐ */
+            text-size-adjust: 100%; /* 他のブラウザでのフォントサイズ自動調整を防ぐ */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        h1, h2, h3 {
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            line-height: 1.4;
+        }
+
+        h1 {
+            font-size: 1.8rem; /* 相対的な単位を使用 */
+            text-align: center;
+            padding: 10px;
+            background-color: var(--header-bg-color);
+            border-bottom: 2px solid var(--secondary-color);
+            scroll-margin-top: 10px; /* アンカーリンクで飛んだ時のヘッダーマージン */
+        }
+
+        h2 {
+            font-size: 1.5rem; /* 相対的な単位を使用 */
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+             scroll-margin-top: 10px;
+        }
+
+        h3 {
+            font-size: 1.2rem; /* 相対的な単位を使用 */
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 2em;
+             scroll-margin-top: 10px;
+        }
+
+        p, li {
+            font-size: 1rem; /* 相対的な単位を使用 */
+            margin-bottom: 1em;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a[href^="tel:"] {
+            white-space: nowrap;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1em auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 1em auto;
+        }
+
+        .step-section {
+            margin-bottom: 2em;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--background-color);
+        }
+        .step-section h3 {
+            margin-top: 0;
+            border: none;
+            padding-left: 0;
+            font-size: 1.3rem;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 1.5em;
+            padding: 15px;
+            border: 1px dashed var(--border-color);
+            border-radius: 5px;
+        }
+        .step-header {
+            font-weight: bold;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .note {
+            background-color: #fffacd;
+            padding: 10px 15px;
+            border-left: 5px solid #f0e68c;
+            margin: 1em 0;
+            font-size: 0.9rem; /* 相対的な単位を使用 */
+        }
+
+        .contact-info {
+            margin-top: 2em;
+            padding: 15px;
+            background-color: var(--header-bg-color);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .section-box {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 1.5em;
+            border-radius: 5px;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .flex-item {
+            flex: 1;
+            min-width: 250px; /* 折り返す基準 */
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+        ul.no-bullet {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1em;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+            font-size: 0.95rem; /* 相対的な単位を使用 */
+        }
+        th {
+            background-color: var(--header-bg-color);
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--link-color);
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+        }
+
+        .image-description {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: -0.5em;
+            margin-bottom: 1em;
+        }
+
+        /* 目次スタイル */
+        #toc {
+            background-color: var(--toc-bg-color);
+            padding: 15px 20px;
+            margin-bottom: 2em;
+            border: 1px solid #b0e0e6;
+            border-radius: 8px;
+        }
+        #toc h2 {
+            margin-top: 0;
+            margin-bottom: 0.5em;
+            text-align: center;
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 8px;
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+        }
+        #toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            columns: 2; /* 2カラム表示を試みる */
+            column-gap: 20px;
+        }
+        #toc li {
+            margin-bottom: 0.6em;
+        }
+        #toc a {
+            text-decoration: none;
+            color: var(--link-color);
+            display: block; /* クリック範囲を広げる */
+            padding: 3px 0;
+        }
+        #toc a:hover {
+            background-color: #e0f0ff;
+            text-decoration: none;
+        }
+
+
+        /* スマートフォン向けの調整 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            h3 {
+                font-size: 1.1rem;
+            }
+            p, li {
+                 /* モバイルではベースサイズを少し小さくすることも検討 */
+            }
+            .step {
+                 /* モバイルではステップ内の要素の配置を調整 */
+            }
+            .qr-code {
+                width: 120px;
+                height: 120px;
+            }
+            th, td {
+                padding: 6px;
+                font-size: 0.9rem;
+            }
+            #toc ul {
+                 columns: 1; /* スマホでは1カラムに戻す */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- === 目次 === -->
+        <nav id="toc">
+            <h2>目次</h2>
+            <ul>
+                <li><a href="#page1">初回利用案内（P-webログイン・メールアドレス登録）</a></li>
+                <li><a href="#page2">マイナンバー登録方法</a></li>
+                <li><a href="#page3">マイナンバー提供のお願い</a></li>
+                <li><a href="#page4">社内情報（メルマガ・社内報・動画・手当）</a></li>
+                <li><a href="#page5">福利厚生のご案内</a></li>
+                <li><a href="#page6">安否確認登録のご案内</a></li>
+                <li><a href="#page7">安否確認サービスの登録方法</a></li>
+            </ul>
+        </nav>
+
+        <!-- === ページ 1: 初回利用案内 === -->
+        <section id="page1">
+            <h1 style="background-color: var(--accent-color); color: white; border:none;">初めての方へ</h1>
+            <h2>給与明細はパソコン・スマホでご覧ください！<br>LEOC P-web</h2>
+
+            <p>「LEOC P-Web」で、毎月の給与明細書をWeb配信しています。<br>
+            いつでもどこでも、お手持ちのスマートフォンやパソコンからアクセスできるサイトです。<br>
+            まだ一度もアクセスしたことのない方は、ぜひ下記案内に沿って登録いただけますようお願いいたします。</p>
+            <p class="note">※ スマートフォンの画面で説明します。パソコン・携帯電話でも入力内容は同じです。</p>
+
+            <div class="step-section">
+                <h3>初回利用の手順</h3>
+
+                <div class="step">
+                    <span class="step-header">ステップ① ログインページへアクセス</span>
+                    <p>【下記のログインページにアクセスします】</p>
+                    <p><a href="https://kyuyo5.keitai-bin.jp/leoc" target="_blank">https://kyuyo5.keitai-bin.jp/leoc</a></p>
+                    <p>パソコン・スマートフォン・携帯電話いずれもアクセスできます。</p>
+                    <p>※お気に入りに入れておくと便利です</p>
+                    <img src="image/p-web_qrコード.png" alt="QRコード：LEOC P-web ログインページ" class="qr-code">
+                </div>
+
+                <div class="step">
+                    <span class="step-header">ステップ② ログイン</span>
+                    <img src="image/p-web_ログイン.png" data-src="image/p-web_ログイン.png"" alt="ログイン画面">
+                    <p class="image-description">（画像：ログイン画面）</p>
+                    <ol>
+                        <li>社員番号を入力します。</li>
+                        <li>パスワードを入力します。<br>
+                            <strong>初回は生年月日（数字8ケタ）を入力</strong><br>
+                            例：1971年4月1日生まれ → <code>19710401</code>
+                        </li>
+                        <li>「ログインする」をタップします。</li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <span class="step-header">ステップ③ 電子交付の承諾</span>
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p1_step3_consent.png" alt="電子交付承諾画面">
+                     <p class="image-description">（画像：電子交付承諾画面）</p>
+                    <p>内容を一読し、「承諾する」をタップします。</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-header">ステップ④ 初期パスワードの変更</span>
+                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p1_step4_password.png" alt="パスワード変更画面">
+                      <p class="image-description">（画像：パスワード変更画面）</p>
+                    <p>自分で覚えやすいパスワードに変更します。</p>
+                    <p class="note">※PDFパスワードは設定しなくても問題ありません。</p>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <h3>メールアドレスを登録してください</h3>
+
+                <div class="step">
+                    <span class="step-header">ステップ① 設定メニューを開く</span>
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p1_settings_step1.png" alt="設定マーク選択画面">
+                     <p class="image-description">（画像：設定マーク選択画面）</p>
+                    <p>画面上部の「設定マーク」(歯車アイコン)を選択します。</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-header">ステップ② メールアドレス変更を選択</span>
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p1_settings_step2.png" alt="メールアドレス変更選択画面">
+                     <p class="image-description">（画像：メールアドレス変更選択画面）</p>
+                    <p>「メールアドレス変更」を選択します。</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-header">ステップ③ メールアドレス入力</span>
+                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p1_settings_step3.png" alt="メールアドレス入力画面">
+                      <p class="image-description">（画像：メールアドレス入力画面）</p>
+                    <p>個人のメールアドレスを入力し、「変更」をタップします。</p>
+                </div>
+
+                 <div class="step">
+                    <span class="step-header">ステップ④ 確認してOK</span>
+                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p1_settings_step4.png" alt="メールアドレス確認画面">
+                     <p class="image-description">（画像：メールアドレス確認画面）</p>
+                    <p>入力したメールアドレスが正しいか確認して「OK」を選択します。</p>
+                 </div>
+
+                 <div class="step">
+                     <span class="step-header">ステップ⑤ 確認メールから登録完了</span>
+                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p1_settings_step5.png" alt="確認メール送信完了画面">
+                     <p class="image-description">（画像：確認メール送信完了画面）</p>
+                    <p>登録したメールアドレスに確認メールが届きます。</p>
+                    <p>確認メール本文のURLをクリックして処理を完了してください。</p>
+                    <p><strong>確認メールから一度ログインして登録完了です！</strong></p>
+                 </div>
+            </div>
+
+            <p class="note" style="background-color: #e0f2f7; border-left-color: #4fc3f7;">P-Webは今後さまざまな手続きやご案内に使用していきます。必ず登録にご協力をお願いいたします。</p>
+
+            <div class="contact-info">
+                問い合わせ先：給与計算部<br>
+                TEL: <a href="tel:03-5220-8506">03-5220-8506</a>
+            </div>
+        </section>
+
+        <hr style="margin: 3em 0; border: 0; border-top: 2px dashed var(--border-color);">
+
+        <!-- === ページ 2: マイナンバー登録 === -->
+        <section id="page2">
+            <h1>LEOC P-web マイナンバーの登録方法</h1>
+            <p class="note">通知カード・マイナンバーカードを手元に置いて始めてください！</p>
+            <p style="text-align: right;">【P-webはこちらから】<br>
+                <a href="https://kyuyo5.keitai-bin.jp/leoc" target="_blank">https://kyuyo5.keitai-bin.jp/leoc</a>
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：LEOC P-web ログインページ" class="qr-code" style="margin: 0.5em 0 0 auto;">
+            </p>
+
+            <div class="step-section">
+                <h3>① 登録画面を表示する</h3>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <p>社員番号とパスワードを入力してログインします。</p>
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p2_step1a_login.png" alt="ログイン画面">
+                        <p class="image-description">（画像：ログイン画面）</p>
+                    </div>
+                    <div class="flex-item">
+                         <p>画面右上のメニューアイコン（三本線や歯車など）をタップし、帳票選択で「マイナンバー登録」を選択します。</p>
+                         <p class="note">※PCの場合は左側のメニューから選択</p>
+                         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p2_step1b_menu.png" alt="メニュー選択画面">
+                         <p class="image-description">（画像：メニュー選択画面）</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <h3>② マイナンバーを入力する</h3>
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p2_step2_input.png" alt="マイナンバー入力画面">
+                 <p class="image-description">（画像：マイナンバー入力画面）</p>
+                <p>「＋」マークをタップし、登録画面を開きます。</p>
+                <ol>
+                    <li>氏名を確認します。</li>
+                    <li>氏名フリガナを確認します。（※全角カタカナ 姓と名の間に全角空白）</li>
+                    <li>続柄で「本人情報です。」にチェックを入れます。</li>
+                    <li>生年月日を確認します。（※年(西暦)/月/日形式 例:2015/04/08）</li>
+                    <li>個人番号（マイナンバー12桁）を入力します。（※半角数字12桁）</li>
+                </ol>
+                 <p>入力したら画面を下にスクロールします。</p>
+            </div>
+
+            <div class="step-section">
+                <h3>③ 通知カードかマイナンバーカードを添付する</h3>
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p2_step3_attach.png" alt="本人確認書類添付手順">
+                 <p class="image-description">（画像：本人確認書類添付手順）</p>
+                <ol>
+                    <li>「添付」をタップします。</li>
+                    <li>「ファイルを選択」をタップします。</li>
+                    <li>カメラを起動するか、保存済みの画像を選択します。</li>
+                    <li>マイナンバーが記載されている面を撮影または選択します。</li>
+                    <li>マイナンバーが画面上できちんと読めるか確認し、「アップロード」をタップします。</li>
+                    <li>「受信完了しました。」と表示されたら、「閉じる」をタップします。</li>
+                </ol>
+                <p class="note">※撮影済みのカードを添付する場合は「画像を選択」から画像の選択可</p>
+            </div>
+
+             <div class="step-section">
+                <h3>④ 扶養家族情報を入力 → 提出する</h3>
+                 <div class="flex-container">
+                     <div class="flex-item">
+                        <h4>扶養家族なしの場合</h4>
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p2_step4a_no_dependents.png" alt="扶養家族なしの場合の提出画面">
+                        <p class="image-description">（画像：扶養家族なし提出画面）</p>
+                        <p>入力内容を確認し、間違いがなければ「提出」をタップします。</p>
+                     </div>
+                     <div class="flex-item">
+                        <h4>扶養家族ありの場合</h4>
+                         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p2_step4b_dependents.png" alt="扶養家族ありの場合の提出画面">
+                         <p class="image-description">（画像：扶養家族あり提出画面）</p>
+                        <p>「家族情報追加」をタップし、扶養家族の情報を②〜⑤と同様に入力・画像添付を行います。</p>
+                        <p>全ての家族情報を入力したら、「提出」をタップします。</p>
+                     </div>
+                 </div>
+                 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p2_step4c_complete.png" alt="マイナンバー登録完了画面" style="width: 300px; margin-top: 2em;">
+                  <p class="image-description">（画像：マイナンバー登録完了画面）</p>
+                 <p style="text-align: center; font-weight: bold; color: var(--secondary-color); font-size: 1.2rem;">マイナンバー登録完了！</p>
+            </div>
+        </section>
+
+        <hr style="margin: 3em 0; border: 0; border-top: 2px dashed var(--border-color);">
+
+        <!-- === ページ 3: マイナンバー提供のお願い === -->
+        <section id="page3">
+            <h1>マイナンバー（個人番号）提供をお願いします</h1>
+            <p>社会保険や税の書類作成・提出のために皆様および皆様の扶養家族の個人番号(マイナンバー)の提供をお願いしております。<br>
+            下記「利用目的」をご覧いただき、マイナンバーの提供をお願いいたします。</p>
+
+            <div class="section-box">
+                <h2>《利用目的》</h2>
+                <p>当社は、貴殿および貴殿の扶養家族の個人番号（行政手続における特定の個人を識別するための番号の利用等に関する法律に定める個人番号）を以下の目的で利用いたします。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">区分</th>
+                            <th>利用目的</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4" style="text-align: center; vertical-align: middle;"><strong>税</strong></td>
+                            <td>1</td>
+                            <td>源泉徴収票作成</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>扶養控除等（異動）申告書作成<br>保険料控除申告書兼給与所得者の配偶者特別控除申告書作成</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>退職所得に関する申告書作成</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>住民税に関する申告書作成</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" style="text-align: center; vertical-align: middle;"><strong>社会保険</strong></td>
+                            <td>5</td>
+                            <td>健康保険・厚生年金保険に関する届出・申請・請求</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>雇用保険・労災保険に関する届出・申請・請求</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex-container">
+                <div class="flex-item" style="background-color: #ffffe0; padding: 20px; border-radius: 10px; border: 1px solid #f0e68c;">
+                    <h3 style="margin-top:0; border: none; padding: 0; text-align:center;">マイナンバーはスマートフォンから登録できます。</h3>
+                    <p>給与明細web配信(LEOC P-web)の初回利用手続きを行ってから(別紙参照)マイナンバーの登録をしてください。</p>
+                    <p style="text-align: center;"><strong>登録方法は<a href="#page2">前のページ</a>をご覧ください。</strong></p>
+                </div>
+                <div class="flex-item section-box" style="background-color: #e0f7fa; border-color:#b2ebf2;">
+                     <h3 style="margin-top:0; border: none; padding: 0;">外国語版をご用意しています</h3>
+                     <p>Foreign language version available.</p>
+                     <p>Ban huong dan bang tieng Viet.</p>
+                     <p>GD本部<br>
+                        TEL: <a href="tel:03-5220-8508">03-5220-8508</a> までお問い合わせください
+                     </p>
+                </div>
+            </div>
+
+
+            <div class="contact-info">
+                本件に関するお問合せ先： 株式会社LEOC 給与計算部 マイナンバー担当<br>
+                電話：<a href="tel:03-5220-8506">03-5220-8506</a>
+            </div>
+        </section>
+
+        <hr style="margin: 3em 0; border: 0; border-top: 2px dashed var(--border-color);">
+
+        <!-- === ページ 4: メルマガ・動画・手当 === -->
+        <section id="page4">
+            <h1>社内情報（メルマガ・社内報・動画・手当）</h1>
+
+            <div class="section-box">
+                <h2>社内メールマガジン登録のお願い</h2>
+                <p>社内の情報伝達強化のため社内メールマガジンを配信しています！<br>
+                ぜひ、メルマガの登録をお願いいたします。</p>
+                <h3>登録方法</h3>
+                <p>（登録方法は2通りございます。どちらかを実施してください）</p>
+                <div class="flex-container">
+                     <div class="flex-item">
+                        <h4>方法① 登録ページから入力</h4>
+                        <p>右記QRコード、または下記URLから登録ページにアクセスし、必要情報（氏名、社員番号、メールアドレス）を入力。</p>
+                        <p>社内メルマガ登録サイト: <a href="https://bit.ly/3FOmOvO" target="_blank">https://bit.ly/3FOmOvO</a></p>
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：社内メルマガ登録サイト" class="qr-code">
+                    </div>
+                     <div class="flex-item">
+                         <h4>方法② メールで申し込み</h4>
+                         <p>件名に「社内メルマガ登録」、本文に氏名、社員番号、メールアドレスを書いて下記宛先にメール送信。</p>
+                         <p>宛先: <a href="mailto:kouhou@leoc.co.jp">kouhou@leoc.co.jp</a> 広報部 金治（かなじ）宛</p>
+                    </div>
+                </div>
+                <p class="note">注意事項：迷惑メール対策で配信できない場合がございますので、<code>kouhou@leoc.co.jp</code>より受信できるよう「指定受信」の設定をお願いいたします。</p>
+            </div>
+
+            <div class="section-box" style="background-color: #fffde7; border-color: #fff59d;">
+                <h2>★WEB社内報「オノパー(ONODERA PARK)」随時更新中！★</h2>
+                 <div class="flex-container">
+                     <div class="flex-item">
+                        <p>LEOCの事業所の取り組みや、グループ会社の活動内容を配信しております。</p>
+                        <p>下記URLまたは右記QRコードよりアクセスしてください。</p>
+                        <p><strong>ログイン時、ユーザー名とパスワードの入力が必要となります。</strong></p>
+                        <ul>
+                            <li>LEOC事業所PCで閲覧する方・個人のスマートフォン等の端末で閲覧する方は、<br>
+                                ユーザー名「<strong>op</strong>」、パスワード「<strong>2</strong>」でログインしてご覧ください。
+                            </li>
+                        </ul>
+                        <p>URL: <a href="https://park.onodera-group.com/" target="_blank">https://park.onodera-group.com/</a></p>
+                        <p>問合せ: 広報部 (<a href="mailto:kouhou@leoc.co.jp">kouhou@leoc.co.jp</a>)</p>
+                    </div>
+                    <div class="flex-item" style="text-align: center;">
+                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：オノパー" class="qr-code">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                 <h2>入社時動画のご案内</h2>
+                 <div class="flex-container">
+                    <div class="flex-item">
+                        <p>LEOCでは、入社される方に会社や業務を知って頂く事を目的とした研修動画がございます。</p>
+                        <ul>
+                            <li><strong>対象者：</strong> LEOCに入社される全ての方</li>
+                            <li><strong>視聴方法：</strong> 事業所PC</li>
+                            <li><strong>会社概要について：</strong> 右記QRコードよりアクセスしてください</li>
+                        </ul>
+                        <p>問合せ：入社時動画リマインド担当 (<a href="mailto:syougaisyatantou@leoc.co.jp">syougaisyatantou@leoc.co.jp</a>)</p>
+                    </div>
+                     <div class="flex-item" style="text-align: center;">
+                         <p><strong>会社概要はこちら</strong></p>
+                         <img src="image/入社案内動画QRコード.png" alt="QRコード：会社概要" class="qr-code">
+                     </div>
+                 </div>
+            </div>
+
+            <div class="section-box">
+                <h2>手当制度のご紹介</h2>
+                <h3>① 母子父子手当</h3>
+                <p>一人親家庭を営み、扶養義務（同居、別居を問わない）のある18歳未満の子の保護者である従業員に対し、申請により月額5,000円を支給します。</p>
+                <p>申請をご希望の方は、下記電話番号へお問い合わせ下さい。</p>
+                <p class="note"><strong>▶母子父子手当に関する問合せ：</strong> 給与計算部 <a href="tel:03-5220-8506">03-5220-8506</a></p>
+
+                <h3>② 紹介手当（※要申請）</h3>
+                <p>ご友人・ご家族をLEOC従業員として紹介できる制度です。是非、ご紹介ください。</p>
+                <p>詳細は、事業所責任者までお問合せください。</p>
+            </div>
+        </section>
+
+         <hr style="margin: 3em 0; border: 0; border-top: 2px dashed var(--border-color);">
+
+        <!-- === ページ 5: 福利厚生 === -->
+        <section id="page5">
+            <h1>福利厚生のご案内</h1>
+
+            <div class="section-box">
+                <h2>① LEOC福利厚生サービス</h2>
+                 <p>入社2ヶ月以上のLEOC従業員は、従業員限定の優待サービスをご利用いただけます。</p>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <h3>ベネフィット・ステーション</h3>
+                        <p>レジャー、グルメなどさまざまなサービスを割引価格で提供。<br>
+                        サービス内容はWEBで確認または電話でお問い合わせください。</p>
+                        <h4>【初回ログイン】</h4>
+                        <ul>
+                            <li><strong>対象：</strong> 入社2か月以上の全従業員</li>
+                            <li><strong>団体ID：</strong> <code>C100130AV</code></li>
+                            <li><strong>認証キー1：</strong> 社員番号6桁</li>
+                            <li><strong>認証キー2：</strong> 生年月日8桁</li>
+                        </ul>
+                         <p><strong>WEB:</strong> <a href="http://bs.benefit-one.inc" target="_blank">http://bs.benefit-one.inc</a><br>
+                            <strong>TEL:</strong> <a href="tel:0800-9192-919">0800-9192-919</a></p>
+                    </div>
+                    <div class="flex-item" style="text-align: center;">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：ベネフィット・ステーション" class="qr-code">
+                    </div>
+                </div>
+                <h4>優待内容の一例：</h4>
+                <p>国内のホテル29,022施設で割引宿泊、グルメ最大50%OFF、映画館割引最大500円OFF、一部、ガソリン、スーパー、コンビニ、またNetflix等生活の支出を抑えるコンテンツも利用できます。</p>
+            </div>
+
+            <div class="section-box">
+                <h2>② その他福利厚生やイベント</h2>
+                <p>誕生日（入社年月より1年以上の方が対象となります）、勤労感謝の日、永年勤続のサプラーの方に贈呈品、サプラー調理コンテスト、LEOC Award、横浜FCのホームゲーム無料観戦など</p>
+            </div>
+
+            <div class="section-box">
+                <h2>③ Biz Person's - 三菱UFJのお役立ちサイト -</h2>
+                <p>ライフ・キャリアイベントに関わるお役立ち情報（結婚・子育て・入院・介護などのお金の基礎知識、キャリアアップの豆知識）や、商品・サービス案内（住宅ローン・積み立てなど）をご覧いただけます。</p>
+                <p class="note">※ご退職後は、一部ご利用できなくなる可能性もございます。</p>
+                <div class="flex-container" style="align-items: center;">
+                     <div class="flex-item">
+                        <h3>利用手順:</h3>
+                        <ol>
+                            <li>スマホ・PCから以下にアクセス:<br>
+                                <a href="https://biz-persons.mufg.jp/userlogin" target="_blank">https://biz-persons.mufg.jp/userlogin</a>
+                            </li>
+                            <li>ID・パスワードは以下の通り<br>
+                                ID: <strong>og</strong><br>
+                                PW: <strong>19834</strong><br>
+                                (登録は一切不要です)
+                            </li>
+                            <li>サイトをチェック</li>
+                        </ol>
+                        <p><strong>登録不要！無料でご覧いただけます！</strong></p>
+                        <p>問合せ：総務部<br>
+                           メール: <a href="mailto:soumu_info@leoc.co.jp">soumu_info@leoc.co.jp</a><br>
+                           電話: <a href="tel:03-5220-8523">03-5220-8523</a>
+                        </p>
+                    </div>
+                     <div class="flex-item">
+                         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p5_bizpersons.png" alt="Biz Person's サイトイメージ">
+                          <p class="image-description">（画像：Biz Person's サイトイメージ）</p>
+                     </div>
+                 </div>
+            </div>
+
+             <div class="section-box">
+                <h2>コンプライアンスカードのご案内</h2>
+                 <p>ONODERA GROUPでは「グループ相談室」を設置し、より良い働きやすい環境を目指しております。ハラスメント、不正等、何か困った事があるときは、同封しております、コンプライアンスカード裏面の「相談窓口」までご連絡をお願いいたします。</p>
+                 <p>本カードは1人1枚ずつ配布しております。各自携帯し、お困りの際は窓口までご連絡ください。</p>
+                 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p5_compliance.png" alt="コンプライアンスカード イメージ">
+                  <p class="image-description">（画像：コンプライアンスカード イメージ）</p>
+                 <p class="note">本カードは、入社書類に同封しております。または事業所でも受け取ることが出来ます。</p>
+             </div>
+        </section>
+
+        <hr style="margin: 3em 0; border: 0; border-top: 2px dashed var(--border-color);">
+
+        <!-- === ページ 6: 安否確認登録案内 === -->
+        <section id="page6">
+            <h1>安否確認登録のご案内</h1>
+            <p>LEOCでは「トヨクモ安否確認サービス2」を利用して緊急時に皆様の安否状況を確認するためのシステムを導入しております。災害に備えて、いつでも気づける通知先の登録をお願いします。</p>
+
+            <div class="section-box">
+                <h2>サービス内容</h2>
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p6_service.png" alt="安否確認サービス概要図">
+                 <p class="image-description">（画像：安否確認サービス概要）</p>
+                <ul>
+                    <li>災害時は電話回線が使用できなくなる恐れがあります。</li>
+                    <li>電話以外の連絡手段として安否確認サービスを導入します。</li>
+                    <li>災害時にも有効なパケット通信を使用しているので連絡手段を確保することができます。</li>
+                </ul>
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p6_trigger.png" alt="安否確認配信トリガー">
+                 <p class="image-description">（画像：安否確認配信の流れ）</p>
+                 <ul>
+                    <li>気象庁の発令（震度5弱以上の地震、1m以上の津波、特別警報）をもとに個人宛に安否確認を自動で配信します。</li>
+                    <li>アンケート形式の設問に回答します。</li>
+                 </ul>
+            </div>
+
+            <div class="section-box">
+                <h2>登録について</h2>
+                <ul>
+                    <li><strong>全社員（社員、サプラー）が登録対象</strong>です。</li>
+                    <li><strong>確実に連絡の取れる「連絡先」（アドレス、専用アプリ）の登録</strong>をお願いします。</li>
+                    <li><strong>家族登録</strong>をしていれば家族間の安否確認のツールとしてもご利用いただけます。</li>
+                </ul>
+                <h3>個人情報の管理体制</h3>
+                <ul>
+                    <li>個人で登録したメールアドレスやパスワードなどは、<strong>管理者でも閲覧できない仕様</strong>です。</li>
+                    <li>事前に所属地域を設定するため、個人情報になる<strong>GPS(位置情報)も取得しない</strong>仕様です。</li>
+                </ul>
+                <p style="text-align: center; font-weight: bold; font-size: 1.1rem;">
+                   登録方法の詳細は<a href="#page7">次のページ</a>をご確認ください。
+                   <span style="color: red; font-size: 2rem; vertical-align: middle;">➔</span>
+                </p>
+            </div>
+
+            <div class="section-box">
+                <h2>登録方法についてお困りの方</h2>
+                 <div class="flex-container">
+                     <div class="flex-item">
+                        <ul>
+                            <li>ログインできない方</li>
+                            <li>登録手段がない方</li>
+                            <li>メールアドレスを代理登録して欲しい方</li>
+                        </ul>
+                        <p>右側のQRコードから問い合わせください。</p>
+                        <p>上記以外でお困りの方は、上長もしくは <a href="mailto:risk_management@onodera-group.com">risk_management@onodera-group.com</a> にご連絡ください。</p>
+                    </div>
+                    <div class="flex-item" style="text-align: center;">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：安否確認登録問合せ" class="qr-code">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <hr style="margin: 3em 0; border: 0; border-top: 2px dashed var(--border-color);">
+
+        <!-- === ページ 7: 安否確認登録方法 === -->
+        <section id="page7">
+            <h1>安否確認サービスの登録方法</h1>
+            <p class="note" style="background-color: #fff3e0; border-left-color: #ffcc80;">※勤務初日より登録いただけます</p>
+
+            <div class="flex-container">
+                <div class="flex-item section-box">
+                    <h2>📱 アプリ登録方法 (スマートフォンの方)</h2>
+                    <h3>① アプリをインストールする</h3>
+                     <div class="flex-container">
+                        <div class="flex-item" style="text-align: center;">
+                            <p><strong>iphone</strong></p>
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：安否確認アプリ (iPhone)" class="qr-code">
+                            <p><a href="#">App Storeで入手</a></p> <!-- Add actual link -->
+                        </div>
+                        <div class="flex-item" style="text-align: center;">
+                            <p><strong>android</strong></p>
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：安否確認アプリ (Android)" class="qr-code">
+                            <p><a href="#">Google Playで手に入れよう</a></p> <!-- Add actual link -->
+                        </div>
+                    </div>
+
+                    <h3>② ログインする</h3>
+                    <p><strong>ログイン情報：</strong></p>
+                    <ul>
+                        <li>利用環境URL: <code>ogb</code></li>
+                        <li>ログイン名: 社員番号 (数字6桁)</li>
+                        <li>パスワード: <code>leoc123</code> (初期パスワード)</li>
+                    </ul>
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p7_app_login.png" alt="安否確認アプリ ログイン画面">
+                     <p class="image-description">（画像：アプリログイン画面）</p>
+                    <p>ログイン後、指示に従いパスワード変更と通知設定を行ってください。</p>
+                </div>
+
+                <div class="flex-item section-box">
+                     <h2>✉️ メールアドレス登録方法 (ガラケーの方・アプリを登録したくない方)</h2>
+                     <h3>① ログインする</h3>
+                     <p>下記URLにアクセスするか、QRコードを読み取ります。</p>
+                     <p>URL: <a href="https://cloud.anpikakunin.com/ogb" target="_blank">https://cloud.anpikakunin.com/ogb</a></p>
+                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWAQMAAAAGzDbkAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAIJJREFUOI3t0LERgzAMANBF6cJ1MEY1zmATVEA3mIAK7sA+38/ng11N/fslB+5z/x0gAQkQAQkQAQlIQAIkIAESkIAESEAClCEBCUhAAhKQgAQkIAESkIAEJCABCUhAAhIgAQlIQAIkIAEJSEACEiABCUhAAhKQgAQkQAIk8FkAj6L5rVt+QGIAAAAASUVORK5CYII=" alt="QRコード：安否確認ログインページ" class="qr-code">
+                     <p><strong>ログイン情報：</strong></p>
+                     <ul>
+                         <li>ログイン名: 社員番号 (数字6桁)</li>
+                         <li>パスワード: <code>leoc123</code></li>
+                     </ul>
+                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p7_web_login.png" alt="安否確認Webログイン画面">
+                      <p class="image-description">（画像：Webログイン画面）</p>
+
+                     <h3>②「個人設定」を開く</h3>
+                      <div class="flex-container">
+                          <div class="flex-item">
+                              <p><strong>スマホ画面例</strong></p>
+                              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p7_web_menu_sp.png" alt="スマホでの個人設定メニュー">
+                               <p class="image-description">（画像：スマホ メニュー）</p>
+                          </div>
+                          <div class="flex-item">
+                              <p><strong>ガラケー画面例</strong></p>
+                              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p7_web_menu_fp.png" alt="ガラケーでの個人設定メニュー">
+                               <p class="image-description">（画像：ガラケー メニュー）</p>
+                          </div>
+                      </div>
+                      <p>メニューから「個人設定」を選択します。</p>
+
+                      <h3>③ 設定をする</h3>
+                      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="doc_images/image_p7_web_settings.png" alt="個人設定画面">
+                       <p class="image-description">（画像：個人設定画面）</p>
+                      <ol>
+                          <li><strong>「プライベート連絡先の設定」</strong><br>
+                              受信したいメールアドレスを設定します。
+                          </li>
+                          <li><strong>「パスワードの変更」</strong><br>
+                              初期パスワード<code>leoc123</code>から必ず変更してください。
+                          </li>
+                      </ol>
+                      <p>※家族メールアドレスの設定も可能です。</p>
+                </div>
+            </div>
+
+            <div class="contact-info" style="background-color: var(--secondary-color); color:white; border-radius: 8px;">
+                 <h2 style="color:white; border:none; margin:0; padding:0; font-size: 1.4rem;">登録完了</h2>
+                 <p style="margin-bottom: 0;">災害時にアンケート形式の安否確認が配信されます。</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- 画像遅延読み込み用スクリプト -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var lazyImages = [].slice.call(document.querySelectorAll("img[data-src]"));
+
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.removeAttribute("data-src");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            } else {
+                // IntersectionObserver未対応ブラウザ向けのフォールバック
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImage.src = lazyImage.dataset.src;
+                    lazyImage.removeAttribute("data-src");
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
